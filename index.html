@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoMaster Pro - Menu Principal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            margin-top: 50px;
+        }
+
+        .logo {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            transition: border-color 0.3s;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .error-msg {
+            color: #e74c3c;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .menu-container {
+            display: none;
+            max-width: 1000px;
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .menu-item {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid transparent;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .menu-item.physique { border-left-color: #667eea; }
+        .menu-item.environnement { border-left-color: #4CAF50; }
+        .menu-item.eau { border-left-color: #2196F3; }
+        .menu-item.climat { border-left-color: #FF9800; }
+        .menu-item.geologie { border-left-color: #795548; }
+        .menu-item.bio { border-left-color: #2e7d32; }
+        .menu-item.madagascar { border-left-color: #FF6B35; }
+        .menu-item.risques { border-left-color: #d32f2f; }
+        .menu-item.urbain { border-left-color: #5e35b1; }
+
+        .menu-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .menu-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .menu-desc {
+            font-size: 0.95em;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .logout-btn {
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .version-info {
+            margin-top: 20px;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 600px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="loginBox">
+        <div class="logo">🌍</div>
+        <h1>GeoMaster Pro</h1>
+        <p class="subtitle">Cours de géographie L1-L2</p>
+        <input type="password" class="password-input" id="passwordInput" placeholder="Mot de passe">
+        <button class="login-btn" onclick="checkPassword()">Accéder aux cours</button>
+        <p class="error-msg" id="errorMsg">Mot de passe incorrect</p>
+    </div>
+
+    <div class="menu-container" id="menuBox">
+        <h1 style="color: white; text-align: center; margin-bottom: 10px;">📚 Menu des cours</h1>
+        <p style="color: rgba(255,255,255,0.9); text-align: center;">Sélectionnez une matière pour commencer</p>
+
+        <div class="menu-grid">
+            <a href="environnement.html" class="menu-item environnement">
+                <div class="menu-icon">🌿</div>
+                <div class="menu-title">Environnement</div>
+                <div class="menu-desc">Écologie, écosystèmes, biodiversité et cycles biogéochimiques</div>
+            </a>
+
+            <a href="hydrosphere.html" class="menu-item eau">
+                <div class="menu-icon">💧</div>
+                <div class="menu-title">Hydrosphère</div>
+                <div class="menu-desc">Eaux continentales, océans, cycle de l'eau et hydrologie</div>
+            </a>
+
+            <a href="climatologie.html" class="menu-item climat">
+                <div class="menu-icon">🌤️</div>
+                <div class="menu-title">Climatologie</div>
+                <div class="menu-desc">Atmosphère, circulation, climats et changement climatique</div>
+            </a>
+
+            <a href="geologie.html" class="menu-item geologie">
+                <div class="menu-icon">🪨</div>
+                <div class="menu-title">Géologie</div>
+                <div class="menu-desc">Structure de la Terre, roches, minéraux et tectonique des plaques</div>
+            </a>
+
+            <a href="biogeographie.html" class="menu-item bio">
+                <div class="menu-icon">🌿</div>
+                <div class="menu-title">Biogéographie</div>
+                <div class="menu-desc">Distribution des espèces, biomes, endémisme et conservation</div>
+            </a>
+
+            <a href="madagascar.html" class="menu-item madagascar">
+                <div class="menu-icon">🌺</div>
+                <div class="menu-title">Madagascar</div>
+                <div class="menu-desc">Géographie physique, biodiversité unique et développement</div>
+            </a>
+
+            <a href="risques.html" class="menu-item risques">
+                <div class="menu-icon">⚠️</div>
+                <div class="menu-title">Gestion des Risques</div>
+                <div class="menu-desc">Risques naturels, technologiques et politiques de prévention</div>
+            </a>
+
+            <a href="geourbaine.html" class="menu-item urbain">
+                <div class="menu-icon">🏙️</div>
+                <div class="menu-title">Géographie Urbaine</div>
+                <div class="menu-desc">Croissance urbaine, systèmes de villes et aménagement</div>
+            </a>
+        </div>
+
+        <div style="text-align: center;">
+            <button class="logout-btn" onclick="logout()">Déconnexion</button>
+        </div>
+    </div>
+
+    <p class="version-info">Version L1-L2 GeoMaster Pro | 8 matières | Niveau Licence</p>
+
+    <script>
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            if (password === 'geokob2024') {
+                document.getElementById('loginBox').style.display = 'none';
+                document.getElementById('menuBox').style.display = 'block';
+                localStorage.setItem('geoAuth', 'true');
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+            }
+        }
+
+        function logout() {
+            document.getElementById('menuBox').style.display = 'none';
+            document.getElementById('loginBox').style.display = 'block';
+            document.getElementById('passwordInput').value = '';
+            localStorage.removeItem('geoAuth');
+        }
+
+        // Vérifier si déjà connecté
+        if (localStorage.getItem('geoAuth') === 'true') {
+            document.getElementById('loginBox').style.display = 'none';
+            document.getElementById('menuBox').style.display = 'block';
+        }
+
+        // Entrée avec Enter
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkPassword();
+        });
+    </script>
+</body>
+</html>
