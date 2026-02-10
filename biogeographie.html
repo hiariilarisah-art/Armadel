@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biogéographie - GeoMaster Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2e7d32 0%, #66bb6a 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            color: #2e7d32;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .nav-back {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #2e7d32;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-back:hover {
+            background: #1b5e20;
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .chapter {
+            background: white;
+            margin: 30px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .chapter-header {
+            background: linear-gradient(135deg, #2e7d32 0%, #66bb6a 100%);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .chapter-header:hover {
+            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+        }
+
+        .chapter-header h2 {
+            font-size: 1.5em;
+        }
+
+        .toggle-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
+        }
+
+        .chapter-content {
+            padding: 25px;
+            display: none;
+        }
+
+        .chapter-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h3 {
+            color: #2e7d32;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+            border-bottom: 2px solid #2e7d32;
+            padding-bottom: 5px;
+        }
+
+        h4 {
+            color: #388e3c;
+            margin: 15px 0 8px 0;
+            font-size: 1.1em;
+        }
+
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+
+        .definition {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left: 5px solid #4CAF50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .important {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 5px solid #FF9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .example {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 5px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #2e7d32 0%, #66bb6a 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        ul, ol {
+            margin: 10px 0 10px 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .formula {
+            background: #f8f9fa;
+            border: 2px solid #2e7d32;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+        }
+
+        .bio-realm {
+            display: inline-block;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .palearctic { background: #5e35b1; }
+        .nearctic { background: #1976d2; }
+        .neotropical { background: #388e3c; }
+        .ethiopian { background: #f57c00; }
+        .oriental { background: #c62828; }
+        .australian { background: #00695c; }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .chapter-header h2 {
+                font-size: 1.2em;
+            }
+
+            .chapter-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌿 Biogéographie</h1>
+        <p>Étude de la distribution géographique des espèces et des écosystèmes</p>
+        <a href="index.html" class="nav-back">← Retour au menu</a>
+    </div>
+
+    <div class="container">
+        <!-- Chapitre 1: Fondements de la biogéographie -->
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 1 : Principes et fondements</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <div class="definition">
+                    <strong>Définition :</strong> La <strong>biogéographie</strong> est la science qui étudie la distribution spatiale et temporelle des espèces vivantes et des communautés, ainsi que les processus écologiques et historiques qui expliquent ces distributions.
+                </div>
+
+                <h3>1.1 Approches de la biogéographie</h3>
+
+                <table>
+                    <tr>
+                        <th>Approche</th>
+                        <th>Échelle</th>
+                        <th>Focus</th>
+                        <th>Méthodes</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Écologique</strong></td>
+                        <td>Local à régional</td>
+                        <td>Interactions actuelles</td>
+                        <td>Transects, expérimentations</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Historique</strong></td>
+                        <td>Régional à global</td>
+                        <td>Origines, migrations</td>
+                        <td>Phylogénie, fossiles</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Conservation</strong></td>
+                        <td>Toutes échelles</td>
+                        <td>Protection biodiversité</td>
+                        <td>Modélisation, SIG</td>
+                    </tr>
+                </table>
+
+                <h3>1.2 Facteurs déterminant la distribution</h3>
+
+                <h4>1.2.1 Facteurs abiotiques</h4>
+                <div class="important">
+                    <strong>1. Climat :</strong>
+                    <ul>
+                        <li><strong>Température</strong> : limite nordique et altitudinale des espèces</li>
+                        <li><strong>Précipitations</strong> : déterminent les formations végétales majeures</li>
+                        <li><strong>Ensoleillement</strong> : photopériode, saisonnalité</li>
+                        <li><strong>Extrêmes</strong> : gel, canicule, sécheresse</li>
+                    </ul>
+
+                    <strong>2. Édaphique (sol) :</strong>
+                    <ul>
+                        <li>pH, texture, drainage</li>
+                        <li>Minéraux (N, P, K disponibilité)</li>
+                        <li>Salinité (halophytes vs glycophytes)</li>
+                    </ul>
+
+                    <strong>3. Topographie :</strong>
+                    <ul>
+                        <li>Altitude (gradient thermique : -0,6°C/100m)</li>
+                        <li>Exposition (insolation, humidité)</li>
+                        <li>Pente (érosion, stabilité)</li>
+                    </ul>
+                </div>
+
+                <h4>1.2.2 Facteurs biotiques</h4>
+                <ul>
+                    <li><strong>Compétition</strong> : exclusion compétitive, niche écologique</li>
+                    <li><strong>Prédation/Herbivorie</strong> : régulation des populations</li>
+                    <li><strong>Mutualisme</strong> : symbioses (mycorhizes, pollinisation)</li>
+                    <li><strong>Parasitisme</strong> : maladies, pathogènes</li>
+                </ul>
+
+                <h4>1.2.3 Facteurs historiques</h4>
+                <ul>
+                    <li><strong>Évolution</strong> : spéciation, adaptation</li>
+                    <li><strong>Dérive des continents</strong> : vicariance</li>
+                    <li><strong>Changements climatiques quaternaires</strong> : refuge, migration</li>
+                    <li><strong>Activité humaine</strong> : introductions, extinctions</li>
+                </ul>
+
+                <h3>1.3 Aires de répartition</h3>
+
+                <div class="definition">
+                    <strong>Aire de répartition (range)</strong> : Espace géographique dans lequel une espèce est naturellement présente.
+                </div>
+
+                <table>
+                    <tr>
+                        <th>Type d'aire</th>
+                        <th>Caractéristiques</th>
+                        <th>Exemples</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Cosmopolite</strong></td>
+                        <td>Présente sur tous les continents</td>
+                        <td>Homme, pissenlit, mouche domestique</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ubiquiste</strong></td>
+                        <td>Très large répartition, divers habitats</td>
+                        <td>Chêne pédonculé, renard roux</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Endémique</strong></td>
+                        <td>Restreinte à une zone géographique</td>
+                        <td>Lémuriens (Madagascar), Kiwi (NZ)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Disjoncte</strong></td>
+                        <td>Populations séparées géographiquement</td>
+                        <td>Magnolia (Asie/Amérique), Tulipier</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Relique</strong></td>
+                        <td>Reste d'aire autrefois vaste</td>
+                        <td>Seqoia (Californie), Ginkgo (Chine)</td>
+                    </tr>
+                </table>
+
+                <div class="formula">
+                    <strong>Rapport aire-espèces :</strong><br>
+                    S = c × A^z<br>
+                    Avec S = nombre d'espèces, A = surface, c et z = constantes (z ≈ 0,2-0,35 pour îles)
+                </div>
+            </div>
+        </div>
+
+        <!-- Chapitre 2: Régions biogéographiques -->
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 2 : Régions et royaumes biogéographiques</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <h3>2.1 Les royaumes biogéographiques (Wallace, 1876)</h3>
+
+                <div class="diagram" style="text-align: center; padding: 20px; background: #f5f5f5; border-radius: 10px; margin: 15px 0;">
+                    <span class="bio-realm palearctic">🌍 PALÉARCTIQUE</span>
+                    <span class="bio-realm nearctic">🌎 NÉARCTIQUE</span>
+                    <span class="bio-realm neotropical">🌎 NÉOTROPICAL</span>
+                    <span class="bio-realm ethiopian">🌍 ÉTHIOPIEN</span>
+                    <span class="bio-realm oriental">🌏 ORIENTAL</span>
+                    <span class="bio-realm australian">🌏 AUSTRALIEN</span>
+                </div>
+
+                <table>
+                    <tr>
+                        <th>Royaume</th>
+                        <th>Localisation</th>
+                        <th>Caractéristiques</th>
+                        <th>Mammifères emblématiques</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Paléarctique</strong></td>
+                        <td>Europe, Asie (hors Sud), Afrique du Nord</td>
+                        <td>Plus vaste, moins de barrières</td>
+                        <td>Renne, ours brun, loup</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Néarctique</strong></td>
+                        <td>Amérique du Nord</td>
+                        <td>Proche du Paléarctique (Bering)</td>
+                        <td>Bison, grizzly, raton laveur</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Néotropical</strong></td>
+                        <td>Amérique du Sud, Antilles</td>
+                        <td>Isolation depuis 65 Ma, très diversifié</td>
+                        <td>Paresseux, jaguar, lama</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Éthiopien</strong></td>
+                        <td>Afrique subsaharienne, Madagascar</td>
+                        <td>Savanes, grande diversité ungulés</td>
+                        <td>Éléphant, lion, girafe, zèbre</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Oriental</strong></td>
+                        <td>Asie du Sud et du Sud-Est</td>
+                        <td>Transition Paléarctique-Australien</td>
+                        <td>Orang-outan, tigre, éléphant d'Asie</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Australien</strong></td>
+                        <td>Australie, NZ, Nouvelle-Guinée</td>
+                        <td>Marsupiaux dominants, très endémique</td>
+                        <td>Kangourou, koala, ornithorynque</td>
+                    </tr>
+                </table>
+
+                <div class="important">
+                    <strong>Ligne de Wallace :</strong> Frontière biogéographique entre l'Oriental et l'Australien, passant entre Bornéo et Célèbes, Bali et Lombok. Marque l'ancienne limite des continents asiatique et australien.
+                </div>
+
+                <h3>2.2 Biomes terrestres majeurs</h3>
+
+                <table>
+                    <tr>
+                        <th>Biome</th>
+                        <th>Climat</th>
+                        <th>Végétation</th>
+                        <th>Faune caractéristique</th>
+                        <th>Localisation</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Forêt tropicale humide</strong></td>
+                        <td>Équatorial, >2000mm/an</td>
+                        <td>Multi-strates, lianes, épiphytes</td>
+                        <td>Primates, oiseaux, insectes</td>
+                        <td>Amazonie, Congo, SE Asie</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Savane</strong></td>
+                        <td>Tropical, saison sec</td>
+                        <td>Herbes hautes, arbres épars</td>
+                        <td>Grands herbivores, prédateurs</td>
+                        <td>Afrique de l'Est, Brésil</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Désert</strong></td>
+                        <td>Aride, <250mm/an</td>
+                        <td>Xérophytes, cactées</td>
+                        <td>Rongeurs, reptiles, arthropodes</td>
+                        <td>Sahara, Outback, Atacama</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Forêt tempérée décidue</strong></td>
+                        <td>Tempéré, 4 saisons</td>
+                        <td>Feuillus (chêne, hêtre, érable)</td>
+                        <td>Cervidés, ours, oiseaux nicheurs</td>
+                        <td>Europe, E USA, Chine</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Taïga</strong></td>
+                        <td>Boréal, froid</td>
+                        <td>Conifères (sapin, pin, épicéa)</td>
+                        <td>Élan, ours, lynx, loups</td>
+                        <td>Canada, Scandinavie, Russie</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Toundra</strong></td>
+                        <td>Arctique, pergélisol</td>
+                        <td>Lichens, mousses, herbes</td>
+                        <td>Renne, lemming, renard arctique</td>
+                        <td>Alaska, Sibérie, Groenland</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Prairie</strong></td>
+                        <td>Continental, modéré</td>
+                        <td>Herbes, graminées</td>
+                        <td>Bisons (historique), rongeurs</td>
+                        <td>Grandes Plaines USA, Ukraine</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Chaparral/Maquis</strong></td>
+                        <td>Méditerranéen</td>
+                        <td>Arbustes sclérophylles</td>
+                        <td>Petits mammifères, reptiles</td>
+                        <td>Méditerranée, Californie, Chili</td>
+                    </tr>
+                </table>
+
+                <h3>2.3 Biogéographie insulaire</h3>
+
+                <div class="definition">
+                    <strong>Théorie de la biogéographie insulaire</strong> (MacArthur & Wilson, 1967) : L'équilibre entre immigration et extinction détermine la richesse spécifique des îles.
+                </div>
+
+                <div class="formula">
+                    <strong>Modèle d'équilibre :</strong><br>
+                    dS/dt = I - E<br>
+                    Avec I = taux d'immigration (décroissant avec S), E = taux d'extinction (croissant avec S)<br>
+                    <br>
+                    <strong>Règles empiriques :</strong><br>
+                    - Richesse ∝ Surface^z (z ≈ 0,2-0,35)<br>
+                    - Richesse ∝ 1/Distance (de la source)
+                </div>
+
+                <div class="example">
+                    <strong>Modèles de colonisation :</strong>
+                    <ul>
+                        <li><strong>Jump dispersal</strong> : saut longue distance (rare)</li>
+                        <li><strong>Diffusion</strong> : expansion progressive depuis la source</li>
+                        <li><strong>Secular migration</strong> : migration lente sur millions d'années</li>
+                    </ul>
+                </div>
+
+                <h4>2.3.1 Règles biogéographiques des îles</h4>
+                <ul>
+                    <li><strong>Règle de la surface</strong> : plus l'île est grande, plus elle abrite d'espèces</li>
+                    <li><strong>Règle de la distance</strong> : plus l'île est proche du continent, plus elle est riche</li>
+                    <li><strong>Effet d'endémisme</strong> : spéciation accrue sur îles isolées (radiations adaptatives)</li>
+                    <li><strong>Règle de la dépendance</strong> : perte de défenses, gigantisme/nanisme insulaire</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Chapitre 3: Histoire et dynamique -->
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 3 : Histoire biogéographique et dynamique</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <h3>3.1 Vicariance et dispersion</h3>
+
+                <table>
+                    <tr>
+                        <th>Processus</th>
+                        <th>Mécanisme</th>
+                        <th>Exemples</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Vicariance</strong></td>
+                        <td>Séparation d'aire par barrière géographique</td>
+                        <td>Atlantique séparant Néarctique et Paléarctique</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dispersion</strong></td>
+                        <td>Migration active ou passive au-delà de la barrière</td>
+                        <td>Grands singes en Asie (dispersion depuis Afrique)</td>
+                    </tr>
+                </table>
+
+                <div class="important">
+                    <strong>Modes de dispersion :</strong>
+                    <ul>
+                        <li><strong>Zoochorie</strong> : transport par animaux (endozoochorie, épizoochorie)</li>
+                        <li><strong>Anémochorie</strong> : transport par vent (graines légères, aigrettes)</li>
+                        <li><strong>Hydrochorie</strong> : transport par eau (fruits flottants)</li>
+                        <li><strong>Barochorie</strong> : gravité (chute des fruits)</li>
+                        <li><strong>Autochorie</strong> : dispersion active (déhiscence explosive)</li>
+                    </ul>
+                </div>
+
+                <h3>3.2 Histoire quaternaire et refuges</h3>
+
+                <h4>3.2.1 Cycles glaciaires et distribution</h4>
+                <p>Durant les ères glaciaires du Pléistocène (2,6 Ma - 11 700 ans) :</p>
+                <ul>
+                    <li><strong>Refuges glaciaires</strong> : zones où les espèces ont survécu (péninsules ibérique, italienne, Balkans)</li>
+                    <li><strong>Recolonisation post-glaciaire</strong> : expansion vers le nord depuis les refuges</li>
+                    <li><strong>Cryptiques refuges</strong> : micro-refuges locaux (vallées, versants abrités)</li>
+                </ul>
+
+                <div class="example">
+                    <strong>Exemple européen :</strong> Le hêtre (Fagus sylvatica) a survécu dans les refuges des Balkans et d'Italie durant le Dernier Maximum Glaciaire (il y a ~20 000 ans), puis a recolonisé l'Europe centrale à une vitesse de 100-300 m/an.
+                </div>
+
+                <h4>3.2.2 Ponts terrestres</h4>
+                <table>
+                    <tr>
+                        <th>Pont</th>
+                        <th>Période</th>
+                        <th>Importance biogéographique</th>
+                    </tr>
+                    <tr>
+                        <td>Béringie</td>
+                        <td>Pleistocène</td>
+                        <td>Échanges Amérique-Asie (mammouths, bisons, humains)</td>
+                    </tr>
+                    <tr>
+                        <td>Panamá</td>
+                        <td>Pliocène (3 Ma)</td>
+                        <td>Grand échange Amériques (Great American Interchange)</td>
+                    </tr>
+                    <tr>
+                        <td>Gibraltar</td>
+                        <td>Messinien (6 Ma)</td>
+                        <td>Dessication Méditerranée, échanges Afrique-Europe</td>
+                    </tr>
+                    <tr>
+                        <td>Sunda-Sahul</td>
+                        <td>Pleistocène</td>
+                        <td>Connexion îles SE Asie, colonisation humaine Australie</td>
+                    </tr>
+                </table>
+
+                <h3>3.3 Biogéographie et conservation</h3>
+
+                <h4>3.3.1 Priorités de conservation</h4>
+                <div class="important">
+                    <strong>Zones critiques :</strong>
+                    <ul>
+                        <li><strong>Hotspots de biodiversité</strong> (Myers, 1988) : 36 zones couvrant 2,3% des terres émergées mais abritant 50% des plantes endémiques et 42% des vertébrés</li>
+                        <li><strong>Mégadiversité</strong> : 17 pays abritant 70% de la biodiversité mondiale</li>
+                        <li><strong>Zones endémiques</strong> : centres d'endémisme (Caucase, Madagascar, Malaisie...)</li>
+                    </ul>
+                </div>
+
+                <h4>3.3.2 Menaces biogéographiques actuelles</h4>
+                <table>
+                    <tr>
+                        <th>Menace</th>
+                        <th>Impact biogéographique</th>
+                        <th>Exemples</th>
+                    </tr>
+                    <tr>
+                        <td>Changement climatique</td>
+                        <td>Décalage vers les pôles/altitudes</td>
+                        <td>Montagne : +6,1 m/decade en altitude</td>
+                    </tr>
+                    <tr>
+                        <td>Fragmentation</td>
+                        <td>Isolation des populations, effet de bord</td>
+                        <td>Forêt amazonienne</td>
+                    </tr>
+                    <tr>
+                        <td>Espèces invasives</td>
+                        <td>Compétition, hybridation, maladies</td>
+                        <td>Champignon Batrachochytrium dendrobatidis</td>
+                    </tr>
+                    <tr>
+                        <td>Urbanisation</td>
+                        <td>Perte d'habitat, corridors bloqués</td>
+                        <td>Corridors écologiques urbains</td>
+                    </tr>
+                </table>
+
+                <div class="formula">
+                    <strong>Déplacement climatique des espèces :</strong><br>
+                    Vitesse requise = (gradient thermique horizontal) / (vitesse de changement climatique)<br>
+                    Actuellement : ~1 km/an nécessaire vs capacité moyenne ~0,5 km/an<br>
+                    = <strong>Décalage d'adaptation (extinction debt)</strong>
+                </div>
+
+                <h4>3.3.3 Outils de conservation biogéographique</h4>
+                <ul>
+                    <li><strong>Réseaux de réserves</strong> : Système de aires protégées représentatives</li>
+                    <li><strong>Corridors biologiques</strong> : Yellowstone to Yukon, Mesoaméricain</li>
+                    <li><strong>Restauration écologique</strong> : rewinding, reconnexion de fragments</li>
+                    <li><strong>Ex-situ</strong> : banques de graines, zoos, clonage</li>
+                </ul>
+
+                <div class="example">
+                    <strong>Initiative Great Green Wall :</strong> Plantation d'une ceinture végétale de 8000 km à travers l'Afrique sahélienne (Sénégal à Djibouti) pour lutter contre la désertification et restaurer la connectivité écologique.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleChapter(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstChapter = document.querySelector('.chapter-header');
+            if (firstChapter) {
+                toggleChapter(firstChapter);
+            }
+        });
+    </script>
+</body>
+</html>

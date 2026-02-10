@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Géographie Urbaine - GeoMaster Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #5e35b1 0%, #3949ab 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            color: #5e35b1;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .nav-back {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #5e35b1;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-back:hover {
+            background: #3949ab;
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .chapter {
+            background: white;
+            margin: 30px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .chapter-header {
+            background: linear-gradient(135deg, #5e35b1 0%, #3949ab 100%);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .chapter-header:hover {
+            background: linear-gradient(135deg, #3949ab 0%, #5e35b1 100%);
+        }
+
+        .chapter-header h2 {
+            font-size: 1.5em;
+        }
+
+        .toggle-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
+        }
+
+        .chapter-content {
+            padding: 25px;
+            display: none;
+        }
+
+        .chapter-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h3 {
+            color: #5e35b1;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+            border-bottom: 2px solid #5e35b1;
+            padding-bottom: 5px;
+        }
+
+        h4 {
+            color: #3949ab;
+            margin: 15px 0 8px 0;
+            font-size: 1.1em;
+        }
+
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+
+        .definition {
+            background: linear-gradient(135deg, #ede7f6 0%, #d1c4e9 100%);
+            border-left: 5px solid #5e35b1;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .important {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 5px solid #ff9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .example {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left: 5px solid #4caf50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #5e35b1 0%, #3949ab 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        ul, ol {
+            margin: 10px 0 10px 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .city-model {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #5e35b1;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .chapter-header h2 {
+                font-size: 1.2em;
+            }
+
+            .chapter-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏙️ Géographie Urbaine</h1>
+        <p>Villes, systèmes urbains et aménagement</p>
+        <a href="index.html" class="nav-back">← Retour au menu</a>
+    </div>
+
+    <div class="container">
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 1 : Croissance urbaine et systèmes de villes</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <div class="definition">
+                    <strong>Géographie urbaine :</strong> Étude des villes comme phénomènes spatiaux, de leur organisation interne, de leur insertion dans les territoires et des dynamiques qui les animent.
+                </div>
+
+                <h3>1.1 Urbanisation mondiale</h3>
+                <table>
+                    <tr>
+                        <th>Année</th>
+                        <th>% Population urbaine</th>
+                        <th>Mégapoles (>10M)</th>
+                    </tr>
+                    <tr>
+                        <td>1950</td>
+                        <td>30%</td>
+                        <td>2 (New York, Tokyo)</td>
+                    </tr>
+                    <tr>
+                        <td>2000</td>
+                        <td>47%</td>
+                        <td>17</td>
+                    </tr>
+                    <tr>
+                        <td>2023</td>
+                        <td>56%</td>
+                        <td>33</td>
+                    </tr>
+                    <tr>
+                        <td>2050 (proj.)</td>
+                        <td>68%</td>
+                        <td>43</td>
+                    </tr>
+                </table>
+
+                <div class="important">
+                    <strong>Trois vagues d'urbanisation :</strong>
+                    <ul>
+                        <li><strong>1850-1950</strong> : Europe et Amérique du Nord (révolution industrielle)</li>
+                        <li><strong>1950-2000</strong> : Amérique latine, Asie de l'Est (décolonisation, industrialisation)</li>
+                        <li><strong>2000-2050</strong> : Afrique et Asie du Sud (urbanisation explosive)</li>
+                    </ul>
+                </div>
+
+                <h3>1.2 Hiérarchie urbaine</h3>
+                <table>
+                    <tr>
+                        <th>Catégorie</th>
+                        <th>Population</th>
+                        <th>Exemples</th>
+                    </tr>
+                    <tr>
+                        <td>Métropole mondiale</td>
+                        <td>>20 M</td>
+                        <td>Tokyo, Delhi, Shanghai, São Paulo</td>
+                    </tr>
+                    <tr>
+                        <td>Mégapole</td>
+                        <td>10-20 M</td>
+                        <td>Cairo, Mexico, Dhaka, Osaka</td>
+                    </tr>
+                    <tr>
+                        <td>Métropole</td>
+                        <td>2-10 M</td>
+                        <td>Paris, Berlin, Sydney, Nairobi</td>
+                    </tr>
+                    <tr>
+                        <td>Grande ville</td>
+                        <td>500K-2M</td>
+                        <td>Lyon, Marseille, Bordeaux</td>
+                    </tr>
+                    <tr>
+                        <td>Ville moyenne</td>
+                        <td>100-500K</td>
+                        <td>Caen, Nancy, Annecy</td>
+                    </tr>
+                </table>
+
+                <h3>1.3 Réseaux et systèmes urbains</h3>
+                <div class="city-model">
+                    <strong>Modèle de Christaller (1933) :</strong> Théorie des lieux centraux. Les villes se hiérarchisent selon leur nombre de fonctions (K = 3, 4, 7). Chaque ville de rang n dessert un nombre fixe de villes de rang n+1.
+                </div>
+
+                <div class="city-model">
+                    <strong>Mégalopoles (Gottmann, 1961) :</strong> Conurbations de métropoles formant des corridors urbains. Exemples : BosWash (Boston-Washington), Tokaido (Tokyo-Osaka), Blue Banana (Europe).
+                </div>
+
+                <h4>Métropolisation</h4>
+                <p>Concentration des populations, activités et décisions dans les grandes métropoles :</p>
+                <ul>
+                    <li>Effets de taille, de gamme, d'envergure</li>
+                    <li>Attraction des capitales économiques</li>
+                    <li>Concurrence interurbaine mondiale</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 2 : Structure interne des villes</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <h3>2.1 Modèles d'organisation spatiale</h3>
+
+                <div class="city-model">
+                    <strong>Modèle concentrique (Burgess, 1925) :</strong> Zones circulaires autour du CBD (Central Business District) :
+                    <ol>
+                        <li>CBD (commerces, bureaux)</li>
+                        <li>Zone de transition (industries, logements dégradés)</li>
+                        <li>Quartiers ouvriers</li>
+                        <li>Quartiers résidentiels aisés</li>
+                        <li>Commuter zone (banlieue)</li>
+                    </ol>
+                </div>
+
+                <div class="city-model">
+                    <strong>Modèle sectoriel (Hoyt, 1939) :</strong> Secteurs radiaires selon axes de transport et gradients de valeur. Les zones riches et pauvres s'étirent en secteurs depuis le centre.
+                </div>
+
+                <div class="city-model">
+                    <strong>Modèle multinucléaire (Harris & Ullman, 1945) :</strong> Plusieurs centres spécialisés (CBD, industriel, universitaire, résidentiel) plutôt qu'un seul centre.
+                </div>
+
+                <h3>2.2 Gentrification et ségrégation</h3>
+                <div class="definition">
+                    <strong>Gentrification :</strong> Processus de réhabilitation de quartiers populaires par des classes moyennes supérieures, entraînant l'expulsion des populations modestes (displacement).
+                </div>
+
+                <div class="important">
+                    <strong>Formes de ségrégation urbaine :</strong>
+                    <ul>
+                        <li><strong>Socio-économique</strong> : quartiers riches vs pauvres (ghettos, banlieues)</li>
+                        <li><strong>Ethnique</strong> : Chinatown, Little Italy, banlieues immigrées</li>
+                        <li><strong>Générationnelle</strong> : cités seniors vs quartiers étudiants</li>
+                        <li><strong>Fonctionnelle</strong> : zones industrielles, commerciales, résidentielles</li>
+                    </ul>
+                </div>
+
+                <h3>2.3 Étalement urbain</h3>
+                <p>Expansion des villes sur les espaces ruraux périphériques :</p>
+                <ul>
+                    <li><strong>Causes</strong> : démographie, aspiration à la maison individuelle, transport individuel</li>
+                    <li><strong>Conséquences</strong> : artificialisation des sols, fragmentation écologique, dépendance automobile</li>
+                    <li><strong>Formes</strong> : périurbanisation, lotissements, zones commerciales périphériques</li>
+                </ul>
+
+                <div class="example">
+                    <strong>Urban sprawl américain :</strong> Atlanta a vu sa population croître de 25% (2000-2010) mais son emprise urbaine de 75%. Densité très faible (10 hab/ha vs 50+ en Europe).
+                </div>
+            </div>
+        </div>
+
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 3 : Aménagement et politiques urbaines</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <h3>3.1 Durabilité urbaine</h3>
+                <table>
+                    <tr>
+                        <th>Dimension</th>
+                        <th>Enjeux</th>
+                        <th>Solutions</th>
+                    </tr>
+                    <tr>
+                        <td>Environnementale</td>
+                        <td>Pollution, îlot de chaleur, étanchéité</td>
+                        <td>Trame verte, toits végétalisés, mobilité douce</td>
+                    </tr>
+                    <tr>
+                        <td>Économique</td>
+                        <td>Emploi, attractivité, innovation</td>
+                        <td>Zones d'activité, écoquartiers, tiers-lieux</td>
+                    </tr>
+                    <tr>
+                        <td>Social</td>
+                        <td>Logement, mixité, équipements</td>
+                        <td>Logement social, PLU inclusif, urbanisme participatif</td>
+                    </tr>
+                </table>
+
+                <h3>3.2 Outils d'aménagement (France)</h3>
+                <ul>
+                    <li><strong>SCOT</strong> : Schéma de Cohérence Territoriale (intercommunal)</li>
+                    <li><strong>PLU</strong> : Plan Local d'Urbanisme (commune)</li>
+                    <li><strong>PLUi</strong> : PLU intercommunal</li>
+                    <li><strong>ZAC</strong> : Zone d'Aménagement Concerté</li>
+                    <li><strong>OPAH</strong> : Opération Programmée d'Amélioration de l'Habitat</li>
+                </ul>
+
+                <h3>3.3 Smart cities</h3>
+                <div class="definition">
+                    <strong>Ville intelligente :</strong> Utilisation des technologies numériques (capteurs, données, IA) pour optimiser la gestion urbaine (énergie, transport, eau, déchets) et améliorer la qualité de vie.
+                </div>
+
+                <div class="example">
+                    <strong>Exemples :</strong> Singapore (capteurs partout), Barcelone (superblocks), Amsterdam (smart grids), Songdo (ville nouvelle coréenne entièrement connectée).
+                </div>
+
+                <h3>3.4 Gouvernance urbaine</h3>
+                <p>Acteurs et niveaux de décision :</p>
+                <ul>
+                    <li><strong>Institutionnel</strong> : État, collectivités, métropoles</li>
+                    <li><strong>Économique</strong> : Investisseurs, promoteurs, entreprises</li>
+                    <li><strong>Civil</strong> : Habitants, associations, ONG</li>
+                    <li><strong>International</strong> : Banques, ONU-Habitat, UE</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleChapter(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstChapter = document.querySelector('.chapter-header');
+            if (firstChapter) toggleChapter(firstChapter);
+        });
+    </script>
+</body>
+</html>

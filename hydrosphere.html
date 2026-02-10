@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydrosphère - GeoMaster Pro</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #2196F3 0%, #03A9F4 100%); 
+            min-height: 100vh; color: #333; line-height: 1.6; 
+        }
+        .header { 
+            background: rgba(255,255,255,0.95); padding: 20px; text-align: center; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; 
+        }
+        .header h1 { color: #2196F3; font-size: 2em; margin-bottom: 10px; }
+        .nav-back { 
+            display: inline-block; margin-top: 10px; padding: 10px 20px; 
+            background: #2196F3; color: white; text-decoration: none; 
+            border-radius: 25px; transition: all 0.3s; 
+        }
+        .nav-back:hover { background: #1976D2; transform: translateY(-2px); }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .chapter { 
+            background: white; margin: 30px 0; border-radius: 15px; 
+            overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+        }
+        .chapter-header { 
+            background: linear-gradient(135deg, #2196F3 0%, #03A9F4 100%); 
+            color: white; padding: 20px; cursor: pointer; 
+            display: flex; justify-content: space-between; align-items: center; 
+        }
+        .chapter-header h2 { font-size: 1.5em; }
+        .toggle-icon { font-size: 1.5em; transition: transform 0.3s; }
+        .chapter-content { padding: 25px; display: none; }
+        .chapter-content.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        h3 { color: #2196F3; margin: 20px 0 10px; font-size: 1.3em; border-bottom: 2px solid #2196F3; padding-bottom: 5px; }
+        h4 { color: #0288D1; margin: 15px 0 8px; font-size: 1.1em; }
+        p { margin-bottom: 12px; text-align: justify; }
+        .definition { 
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); 
+            border-left: 5px solid #2196F3; padding: 15px; margin: 15px 0; 
+            border-radius: 0 10px 10px 0; 
+        }
+        .important { 
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%); 
+            border-left: 5px solid #FF9800; padding: 15px; margin: 15px 0; 
+            border-radius: 0 10px 10px 0; 
+        }
+        table { 
+            width: 100%; border-collapse: collapse; margin: 15px 0; 
+            background: white; border-radius: 10px; overflow: hidden; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 0.95em;
+        }
+        th { 
+            background: linear-gradient(135deg, #2196F3 0%, #03A9F4 100%); 
+            color: white; padding: 12px; text-align: left; 
+        }
+        td { padding: 10px 12px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f5f5f5; }
+        ul, ol { margin: 10px 0 10px 20px; }
+        li { margin-bottom: 8px; }
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.5em; }
+            .chapter-header h2 { font-size: 1.2em; }
+            .chapter-content { padding: 15px; }
+            table { font-size: 0.85em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>💧 Hydrosphère</h1>
+        <p>Eaux continentales et océans</p>
+        <a href="index.html" class="nav-back">← Retour au menu</a>
+    </div>
+    <div class="container">
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 1 : L'eau sur Terre</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <div class="definition">
+                    <strong>Hydrosphère</strong> : Enveloppe liquide de la Terre comprenant tous les réservoirs d'eau (océans, glaciers, eaux souterraines, atmosphère). L'eau couvre 71% de la surface terrestre.
+                </div>
+                <h3>1.1 Répartition de l'eau</h3>
+                <table>
+                    <tr><th>Réservoir</th><th>Volume (km³)</th><th>% total</th><th>Temps de résidence</th></tr>
+                    <tr><td>Océans</td><td>1 338 000 000</td><td>96,5%</td><td>3 000 ans</td></tr>
+                    <tr><td>Glaciers</td><td>24 064 000</td><td>1,74%</td><td>1 000-10 000 ans</td></tr>
+                    <tr><td>Nappes souterraines</td><td>23 400 000</td><td>1,7%</td><td>100-10 000 ans</td></tr>
+                    <tr><td>Pergélisol</td><td>300 000</td><td>0,022%</td><td>1 000 ans</td></tr>
+                    <tr><td>Lacs</td><td>176 400</td><td>0,013%</td><td>10-100 ans</td></tr>
+                    <tr><td>Atmosphère</td><td>12 900</td><td>0,001%</td><td>9 jours</td></tr>
+                    <tr><td>Cours d'eau</td><td>2 120</td><td>0,0002%</td><td>12-20 jours</td></tr>
+                </table>
+                <div class="important">
+                    <strong>Eau douce accessible</strong> : Seulement 0,3% de l'eau totale est douce et facilement accessible (lacs, rivières, nappes peu profondes).
+                </div>
+                <h3>1.2 Cycle hydrologique</h3>
+                <p>Flux annuels estimés :</p>
+                <ul>
+                    <li><strong>Évaporation océanique</strong> : 425 000 km³/an</li>
+                    <li><strong>Précipitations océaniques</strong> : 385 000 km³/an</li>
+                    <li><strong>Transport atmosphérique</strong> : 40 000 km³/an vers les continents</li>
+                    <li><strong>Écoulement continental</strong> : 40 000 km³/an retour aux océans</li>
+                </ul>
+            </div>
+        </div>
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 2 : Eaux continentales</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <h3>2.1 Cours d'eau</h3>
+                <div class="definition">
+                    <strong>Bassin versant</strong> : Surface drainée par un cours d'eau et ses affluents. Délimité par des lignes de partage des eaux (lignes de crête).
+                </div>
+                <h4>Régimes hydrologiques</h4>
+                <table>
+                    <tr><th>Régime</th><th>Caractéristiques</th><th>Exemples</th></tr>
+                    <tr><td>Pluvial océanique</td><td>Crues hivernales, étiage estival</td><td>Seine, Loire</td></tr>
+                    <tr><td>Pluvial méditerranéen</td><td>Crues automnales/hivernales, étiage marqué</td><td>Rhône, Var</td></tr>
+                    <tr><td>Nival</td><td>Crue printanière (fonte des neiges)</td><td>Rhin, Danube</td></tr>
+                    <tr><td>Glaciaire</td><td>Crue estivale maximale</td><td>Cours d'eau alpins</td></tr>
+                    <tr><td>Équatorial</td><td>Deux crues (saison des pluies)</td><td>Congo, Amazone</td></tr>
+                </table>
+                <h3>2.2 Lacs</h3>
+                <h4>Classification par origine</h4>
+                <ul>
+                    <li><strong>Tectoniques</strong> : Rift (Tanganyika, Baïkal)</li>
+                    <li><strong>Glaciaires</strong> : Cirques, lacs proglaciaires (Léman, Annecy)</li>
+                    <li><strong>Volcaniques</strong> : Cratères (Toba), barrages lave</li>
+                    <li><strong>Fluviatiles</strong> : Vieux méandres, bras morts</li>
+                    <li><strong>Côtiers</strong> : Lagunes (Hourtin-Carcans)</li>
+                </ul>
+                <h3>2.3 Eaux souterraines</h3>
+                <div class="important">
+                    <strong>Nappe phréatique</strong> : Eau emplissant les pores et fissures des roches. Recharge par infiltration des précipitations. Débit lent mais régulier (alimentation cours d'eau en étiage).
+                </div>
+            </div>
+        </div>
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 3 : Océans et mers</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <h3>3.1 Physique et chimie marine</h3>
+                <table>
+                    <tr><th>Paramètre</th><th>Valeur moyenne</th><th>Variation</th></tr>
+                    <tr><td>Salinité</td><td>34,7 ‰</td><td>33-37 ‰ (plus élevée en tropical)</td></tr>
+                    <tr><td>Température surface</td><td>17°C</td><td>-2°C (pôles) à 30°C (équateur)</td></tr>
+                    <tr><td>Profondeur moyenne</td><td>3 688 m</td><td>Max 11 022 m (Fosse Mariannes)</td></tr>
+                    <tr><td>Densité</td><td>1,025 g/cm³</td><td>Varie avec T et salinité</td></tr>
+                </table>
+                <h3>3.2 Circulation océanique</h3>
+                <h4>Circulation de surface</h4>
+                <p>Entraînée par les vents (alizés, vents d'ouest) et déviée par la force de Coriolis :</p>
+                <ul>
+                    <li><strong>Gyres subtropicaux</strong> : Tourbillons horaire (N), anti-horaire (S)</li>
+                    <li><strong>Courants de bord ouest</strong> : Intenses, étroits (Gulf Stream, Kuroshio)</li>
+                    <li><strong>Courants de bord est</strong> : Larges, lents (Canary, Californie)</li>
+                </ul>
+                <h4>Circulation thermohaline</h4>
+                <div class="definition">
+                    <strong>Marcheuse globale</strong> : Circulation profonde (1-2 cm/s) entraînée par les différences de densité (température et salinité). Cycle complet : ~1 000 ans.
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleChapter(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstChapter = document.querySelector('.chapter-header');
+            if (firstChapter) toggleChapter(firstChapter);
+        });
+    </script>
+</body>
+</html>

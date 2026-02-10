@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Environnement - GeoMaster Pro</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%); 
+            min-height: 100vh; color: #333; line-height: 1.6; 
+        }
+        .header { 
+            background: rgba(255,255,255,0.95); padding: 20px; text-align: center; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; 
+        }
+        .header h1 { color: #4CAF50; font-size: 2em; margin-bottom: 10px; }
+        .nav-back { 
+            display: inline-block; margin-top: 10px; padding: 10px 20px; 
+            background: #4CAF50; color: white; text-decoration: none; 
+            border-radius: 25px; transition: all 0.3s; 
+        }
+        .nav-back:hover { background: #45a049; transform: translateY(-2px); }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .chapter { 
+            background: white; margin: 30px 0; border-radius: 15px; 
+            overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+        }
+        .chapter-header { 
+            background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%); 
+            color: white; padding: 20px; cursor: pointer; 
+            display: flex; justify-content: space-between; align-items: center; 
+        }
+        .chapter-header h2 { font-size: 1.5em; }
+        .toggle-icon { font-size: 1.5em; transition: transform 0.3s; }
+        .chapter-content { padding: 25px; display: none; }
+        .chapter-content.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        h3 { color: #4CAF50; margin: 20px 0 10px; font-size: 1.3em; border-bottom: 2px solid #4CAF50; padding-bottom: 5px; }
+        h4 { color: #388E3C; margin: 15px 0 8px; font-size: 1.1em; }
+        p { margin-bottom: 12px; text-align: justify; }
+        .definition { 
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%); 
+            border-left: 5px solid #4CAF50; padding: 15px; margin: 15px 0; 
+            border-radius: 0 10px 10px 0; 
+        }
+        .important { 
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%); 
+            border-left: 5px solid #FF9800; padding: 15px; margin: 15px 0; 
+            border-radius: 0 10px 10px 0; 
+        }
+        table { 
+            width: 100%; border-collapse: collapse; margin: 15px 0; 
+            background: white; border-radius: 10px; overflow: hidden; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 0.95em;
+        }
+        th { 
+            background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%); 
+            color: white; padding: 12px; text-align: left; 
+        }
+        td { padding: 10px 12px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f5f5f5; }
+        ul, ol { margin: 10px 0 10px 20px; }
+        li { margin-bottom: 8px; }
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.5em; }
+            .chapter-header h2 { font-size: 1.2em; }
+            .chapter-content { padding: 15px; }
+            table { font-size: 0.85em; }
+            th, td { padding: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌿 Environnement</h1>
+        <p>Écologie, écosystèmes et biodiversité</p>
+        <a href="index.html" class="nav-back">← Retour au menu</a>
+    </div>
+    <div class="container">
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 1 : Introduction à l'écologie</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <div class="definition">
+                    <strong>Écologie</strong> : Science qui étudie les relations des organismes vivants entre eux et avec leur environnement. Le terme est créé en 1866 par Ernst Haeckel (du grec "oikos" = maison et "logos" = science).
+                </div>
+                <h3>1.1 Niveaux d'organisation du vivant</h3>
+                <table>
+                    <tr><th>Niveau</th><th>Définition</th><th>Exemple</th></tr>
+                    <tr><td>Organisme</td><td>Individu vivant</td><td>Un chêne, un loup</td></tr>
+                    <tr><td>Population</td><td>Ensemble d'individus même espèce</td><td>Tous les loups d'une forêt</td></tr>
+                    <tr><td>Communauté</td><td>Ensemble des populations</td><td>Forêt (plantes + animaux)</td></tr>
+                    <tr><td>Écosystème</td><td>Communauté + milieu physique</td><td>Forêt + sol + climat</td></tr>
+                    <tr><td>Biosphère</td><td>Ensemble des écosystèmes</td><td>Terre entière</td></tr>
+                </table>
+                <h3>1.2 Facteurs écologiques</h3>
+                <h4>Facteurs abiotiques (physiques)</h4>
+                <ul>
+                    <li><strong>Climatiques</strong> : température, luminosité, précipitations</li>
+                    <li><strong>Édaphiques</strong> : pH, texture, composition du sol</li>
+                    <li><strong>Topographiques</strong> : altitude, pente, exposition</li>
+                </ul>
+                <div class="important">
+                    <strong>Loi de tolerance de Shelford (1911)</strong> : Chaque espèce peut survivre uniquement dans une certaine fourchette d'un facteur écologique (zone de tolérance). Au-delà : zone de mortalité.
+                </div>
+                <h4>Facteurs biotiques (vivants)</h4>
+                <ul>
+                    <li><strong>Intra-spécifiques</strong> : entre individus même espèce (compétition, coopération)</li>
+                    <li><strong>Inter-spécifiques</strong> : entre espèces différentes (prédation, mutualisme, parasitisme)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 2 : Les écosystèmes</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <div class="definition">
+                    <strong>Écosystème</strong> : Système écologique fonctionnel constitué d'un biocénose (communauté d'êtres vivants) et d'un biotope (milieu physique) en interaction.
+                </div>
+                <h3>2.1 Structure d'un écosystème</h3>
+                <table>
+                    <tr><th>Composante</th><th>Rôle</th><th>Exemples</th></tr>
+                    <tr><td>Producteurs primaires</td><td>Photosynthèse, production matière organique</td><td>Plantes, algues, phytoplancton</td></tr>
+                    <tr><td>Consommateurs primaires</td><td>Herbivores</td><td>Lapins, zèbres, ruminants</td></tr>
+                    <tr><td>Consommateurs secondaires</td><td>Carnivores</td><td>Loups, lions, requins</td></tr>
+                    <tr><td>Décomposeurs</td><td>Recyclage matière</td><td>Bactéries, champignons</td></tr>
+                </table>
+                <h3>2.2 Flux d'énergie</h3>
+                <div class="important">
+                    <strong>Loi des 10% (Lindemann, 1942)</strong> : Seulement 10% de l'énergie est transférée d'un niveau trophique au suivant. Les 90% restants sont perdus (chaleur, métabolisme).
+                </div>
+                <p><strong>Pyramide énergétique</strong> : Production primaire → Consommateurs I (10%) → Consommateurs II (1%) → Consommateurs III (0.1%)</p>
+                <h3>2.3 Cycles biogéochimiques</h3>
+                <h4>Cycle du carbone</h4>
+                <ul>
+                    <li><strong>Puits</strong> : photosynthèse, dissolution océanique</li>
+                    <li><strong>Sources</strong> : respiration, combustion, fermentation</li>
+                    <li><strong>Réservoirs</strong> : atmosphère (750 Gt), océans (38 000 Gt), roches sédimentaires</li>
+                </ul>
+                <h4>Cycle de l'azote</h4>
+                <p>Fixation (bactéries) → Nitrification → Assimilation → Ammonification → Déniitrification</p>
+            </div>
+        </div>
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 3 : La biodiversité</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <div class="definition">
+                    <strong>Biodiversité</strong> : Diversité du vivant à toutes les échelles - génétique (variabilité gènes), spécifique (nombre d'espèces), écosystémique (variété habitats).
+                </div>
+                <h3>3.1 Distribution géographique</h3>
+                <div class="important">
+                    <strong>Gradient latitudinal</strong> : La biodiversité augmente des pôles vers l'équateur (hypothèses : stabilité climatique, productivité, temps d'évolution).
+                </div>
+                <h3>3.2 Menaces sur la biodiversité</h3>
+                <table>
+                    <tr><th>Menace</th><th>Description</th><th>Impact</th></tr>
+                    <tr><td>Déforestation</td><td>Perte forêts tropicale</td><td>13 M ha/an (FAO)</td></tr>
+                    <tr><td>Changement climatique</td><td>Décalage climatique > vitesse migration</td><td>Extinction 20-30% espèces d'ici 2100</td></tr>
+                    <tr><td>Espèces invasives</td><td>Introduction volontaire/accidentelle</td><td>5ème cause d'extinction</td></tr>
+                    <tr><td>Surpêche</td><td>Prélèvement supérieur renouvellement</td><td>34% stocks surexploités</td></tr>
+                </table>
+                <h3>3.3 Conservation</h3>
+                <ul>
+                    <li><strong>In-situ</strong> : aires protégées (parcs nationaux, réserves)</li>
+                    <li><strong>Ex-situ</strong> : zoos, jardins botaniques, banques de graines</li>
+                    <li><strong>CBD</strong> : Convention Diversité Biologique (Rio 1992)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleChapter(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstChapter = document.querySelector('.chapter-header');
+            if (firstChapter) toggleChapter(firstChapter);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Géographie des Risques - GeoMaster Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #d32f2f 0%, #f57c00 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            color: #d32f2f;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .nav-back {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #d32f2f;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-back:hover {
+            background: #b71c1c;
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .chapter {
+            background: white;
+            margin: 30px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .chapter-header {
+            background: linear-gradient(135deg, #d32f2f 0%, #f57c00 100%);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .chapter-header:hover {
+            background: linear-gradient(135deg, #b71c1c 0%, #d32f2f 100%);
+        }
+
+        .chapter-header h2 {
+            font-size: 1.5em;
+        }
+
+        .toggle-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
+        }
+
+        .chapter-content {
+            padding: 25px;
+            display: none;
+        }
+
+        .chapter-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h3 {
+            color: #d32f2f;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+            border-bottom: 2px solid #d32f2f;
+            padding-bottom: 5px;
+        }
+
+        h4 {
+            color: #f57c00;
+            margin: 15px 0 8px 0;
+            font-size: 1.1em;
+        }
+
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+
+        .definition {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border-left: 5px solid #d32f2f;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .important {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 5px solid #f57c00;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .example {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 5px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #d32f2f 0%, #f57c00 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        ul, ol {
+            margin: 10px 0 10px 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .risk-level {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.85em;
+        }
+
+        .risk-low { background: #4caf50; }
+        .risk-medium { background: #ff9800; }
+        .risk-high { background: #f44336; }
+        .risk-extreme { background: #b71c1c; }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .chapter-header h2 {
+                font-size: 1.2em;
+            }
+
+            .chapter-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚠️ Géographie des Risques</h1>
+        <p>Aléas naturels, technologiques et gestion des risques</p>
+        <a href="index.html" class="nav-back">← Retour au menu</a>
+    </div>
+
+    <div class="container">
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 1 : Risques naturels</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <div class="definition">
+                    <strong>Risque naturel :</strong> Aléa naturel (phénomène dangereux) + enjeux (population, biens, activités). R = H × V × E (Hasard × Vulnérabilité × Exposition).
+                </div>
+
+                <h3>1.1 Risques géologiques</h3>
+
+                <h4>Séismes</h4>
+                <table>
+                    <tr>
+                        <th>Caractéristique</th>
+                        <th>Détail</th>
+                    </tr>
+                    <tr>
+                        <td>Origine</td>
+                        <td>Failles actives, subduction, collision</td>
+                    </tr>
+                    <tr>
+                        <td>Mesure</td>
+                        <td>Magnitude (Mw) : énergie libérée</td>
+                    </tr>
+                    <tr>
+                        <td>Zones à risque</td>
+                        <td>Ceinture de feu du Pacifique, Alpes, Himalaya</td>
+                    </tr>
+                    <tr>
+                        <td>Prévention</td>
+                        <td>Normes parasismiques, plans d'urgence</td>
+                    </tr>
+                </table>
+
+                <div class="example">
+                    <strong>Séismes majeurs récents :</strong><br>
+                    - Tōhoku 2011 (Japon) : Mw 9,0 → tsunami, Fukushima<br>
+                    - Haïti 2010 : Mw 7,0 → 250 000 morts (bâtiments non parasismiques)<br>
+                    - Turquie-Syrie 2023 : Mw 7,8 → 50 000+ morts
+                </div>
+
+                <h4>Volcans</h4>
+                <ul>
+                    <li><strong>Éruptions effusives</strong> : lave fluide (Hawaii), moins dangereuses</li>
+                    <li><strong>Éruptions explosives</strong> : gaz, cendres, nuées ardentes (Mont Pelée 1902)</li>
+                    <li><strong>Indices de risque</strong> : sismicité, déformation, gaz (SO2)</li>
+                </ul>
+
+                <h4>Mouvements de terrain</h4>
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Déclencheur</th>
+                        <th>Prévention</th>
+                    </tr>
+                    <tr>
+                        <td>Glissements</td>
+                        <td>Pluies, séismes, déforestation</td>
+                        <td>Drainage, végétalisation</td>
+                    </tr>
+                    <tr>
+                        <td>Éboulements</td>
+                        <td>Érosion, gel-dégel</td>
+                        <td>Filets, galeries</td>
+                    </tr>
+                    <tr>
+                        <td>Effondrements karstiques</td>
+                        <td> dissolution calcaire</td>
+                        <td>Études géotechniques</td>
+                    </tr>
+                </table>
+
+                <h3>1.2 Risques hydrométéorologiques</h3>
+
+                <h4>Inondations</h4>
+                <div class="important">
+                    <strong>Types d'inondations :</strong>
+                    <ul>
+                        <li><strong>Débordement fluvial</strong> : crue lente, vallées (crue centennale)</li>
+                        <li><strong>Ruissellement urbain</strong> : pluies intenses, imperméabilisation</li>
+                        <li><strong>Submersion marine</strong> : tempêtes, tsunami, montée des eaux</li>
+                    </ul>
+                </div>
+
+                <h4>Cyclones et tempêtes</h4>
+                <table>
+                    <tr>
+                        <th>Bassin</th>
+                        <th>Nom</th>
+                        <th>Saison</th>
+                        <th>Exemple récent</th>
+                    </tr>
+                    <tr>
+                        <td>Atlantique</td>
+                        <td>Ouragans</td>
+                        <td>Juin-Novembre</td>
+                        <td>Irma 2017, Ian 2022</td>
+                    </tr>
+                    <tr>
+                        <td>Pacifique Ouest</td>
+                        <td>Typhons</td>
+                        <td>Toute l'année</td>
+                        <td>Haiyan 2013 (Philippines)</td>
+                    </tr>
+                    <tr>
+                        <td>Indien SW</td>
+                        <td>Cyclones</td>
+                        <td>Novembre-Avril</td>
+                        <td>Idai 2019 (Mozambique)</td>
+                    </tr>
+                </table>
+
+                <h4>Sécheresses et feux</h4>
+                <ul>
+                    <li><strong>Sécheresse météorologique</strong> : déficit pluviométrique</li>
+                    <li><strong>Sécheresse agricole</strong> : déficit hydrique pour cultures</li>
+                    <li><strong>Sécheresse hydrologique</strong> : étiage, baisse nappes</li>
+                    <li><strong>Feux de forêt</strong> : Australie 2019-2020, Canada 2023</li>
+                </ul>
+
+                <h3>1.3 Risques climatiques émergents</h3>
+                <div class="important">
+                    <strong>Changement climatique et risques :</strong>
+                    <ul>
+                        <li>Intensification cyclones et précipitations extrêmes</li>
+                        <li>Vagues de chaleur plus fréquentes et intenses</li>
+                        <li>Montée du niveau des mers (submersions côtières)</li>
+                        <li>Changement régimes hydrologiques (crues/étiages)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 2 : Risques technologiques et sanitaires</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <h3>2.1 Risques technologiques</h3>
+
+                <h4>Industriels (Seveso)</h4>
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Exemples</th>
+                        <th>Conséquences</th>
+                    </tr>
+                    <tr>
+                        <td>Explosions</td>
+                        <td>AZF Toulouse 2001</td>
+                        <td>30 morts, dommages étendus</td>
+                    </tr>
+                    <tr>
+                        <td>Rejets toxiques</td>
+                        <td>Bhopal 1984 (Inde)</td>
+                        <td>15 000+ morts (isocyanate)</td>
+                    </tr>
+                    <tr>
+                        <td>Nucléaires</td>
+                        <td>Tchernobyl 1986, Fukushima 2011</td>
+                        <td>Contamination radioactive</td>
+                    </tr>
+                </table>
+
+                <h4>Transports</h4>
+                <ul>
+                    <li>Maritimes : naufrages (Prestige 2002, Erika 1999)</li>
+                    <li>Routiers : transport matières dangereuses</li>
+                    <li>Ferroviaires : déraillements</li>
+                    <li>Aériens : crashs, retombées</li>
+                </ul>
+
+                <h4>Numériques</h4>
+                <p>Cyberattaques, panne d'infrastructures critiques (électricité, eau, santé).</p>
+
+                <h3>2.2 Risques sanitaires</h3>
+                <div class="definition">
+                    <strong>Pandémies :</strong> Propagation mondiale d'une maladie infectieuse. COVID-19 (2020-2023) : 7 M de morts, crise économique majeure.
+                </div>
+
+                <table>
+                    <tr>
+                        <th>Épidémie</th>
+                        <th>Agent</th>
+                        <th>Impact</th>
+                    </tr>
+                    <tr>
+                        <td>Peste noire (XIVe)</td>
+                        <td>Yersinia pestis</td>
+                        <td>30-60% population européenne</td>
+                    </tr>
+                    <tr>
+                        <td>Grippe espagnole (1918)</td>
+                        <td>Virus H1N1</td>
+                        <td>20-50 M morts</td>
+                    </tr>
+                    <tr>
+                        <td>VIH/SIDA</td>
+                        <td>Rétrovirus</td>
+                        <td>40 M morts depuis 1981</td>
+                    </tr>
+                    <tr>
+                        <td>COVID-19</td>
+                        <td>SARS-CoV-2</td>
+                        <td>7 M morts, crise globale</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 3 : Gestion des risques</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <h3>3.1 Cycle de gestion des risques</h3>
+                <ol>
+                    <li><strong>Prévention</strong> : éviter ou réduire l'aléa (zonage, normes)</li>
+                    <li><strong>Préparation</strong> : plans d'urgence, exercices, stocks</li>
+                    <li><strong>Intervention</strong> : secours, évacuation, sauvetage</li>
+                    <li><strong>Reconstruction</strong> : retour à la normale, mieux reconstruire</li>
+                </ol>
+
+                <h3>3.2 Outils de gestion</h3>
+                <table>
+                    <tr>
+                        <th>Outil</th>
+                        <th>Description</th>
+                        <th>Exemple</th>
+                    </tr>
+                    <tr>
+                        <td>PPRI / PPR</td>
+                        <td>Plans de prévention des risques</td>
+                        <td>Zonage réglementaire France</td>
+                    </tr>
+                    <tr>
+                        <td>PCS / PMS</td>
+                        <td>Plans communaux/maritimes de sauvegarde</td>
+                        <td>Organisation secours</td>
+                    </tr>
+                    <tr>
+                        <td>SCOT/SRADDET</td>
+                        <td>Aménagement intégrant les risques</td>
+                        <td>Évitement zones inondables</td>
+                    </tr>
+                    <tr>
+                        <td>Assurance</td>
+                        <td>Transfert du risque</td>
+                        <td>CatNat en France</td>
+                    </tr>
+                </table>
+
+                <h3>3.3 Réduction des risques (DRR)</h3>
+                <div class="important">
+                    <strong>Cadre de Sendai (2015-2030) :</strong> 4 priorités :
+                    <ul>
+                        <li>Compréhension du risque (données, recherche)</li>
+                        <li>Gouvernance (politiques, institutions)</li>
+                        <li>Investissement (résilience infrastructures)</li>
+                        <li>Préparation (alerte, reconstruction)</li>
+                    </ul>
+                </div>
+
+                <h3>3.4 Alertes et prévision</h3>
+                <ul>
+                    <li><strong>Systèmes d'alerte précoce</strong> (SAE) : météo, tsunami (PTWC)</li>
+                    <li><strong>Indicateurs</strong> : seuils pluie, magnitude, concentration polluants</li>
+                    <li><strong>Communication</strong> : apps, sirènes, médias, réseaux sociaux</li>
+                </ul>
+
+                <div class="example">
+                    <strong>Exemple réussi :</strong> Cyclone Idai 2019 (Mozambique) : système d'alerte a permis d'évacuer 600 000 personnes, réduisant les pertes humaines malgré l'ampleur du désastre.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleChapter(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstChapter = document.querySelector('.chapter-header');
+            if (firstChapter) toggleChapter(firstChapter);
+        });
+    </script>
+</body>
+</html>

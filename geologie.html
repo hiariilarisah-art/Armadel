@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Géologie - GeoMaster Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            color: #8B4513;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .nav-back {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #8B4513;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-back:hover {
+            background: #D2691E;
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .chapter {
+            background: white;
+            margin: 30px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .chapter-header {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .chapter-header:hover {
+            background: linear-gradient(135deg, #D2691E 0%, #8B4513 100%);
+        }
+
+        .chapter-header h2 {
+            font-size: 1.5em;
+        }
+
+        .toggle-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
+        }
+
+        .chapter-content {
+            padding: 25px;
+            display: none;
+        }
+
+        .chapter-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h3 {
+            color: #8B4513;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+            border-bottom: 2px solid #8B4513;
+            padding-bottom: 5px;
+        }
+
+        h4 {
+            color: #D2691E;
+            margin: 15px 0 8px 0;
+            font-size: 1.1em;
+        }
+
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+
+        .definition {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            border-left: 5px solid #9c27b0;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .important {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 5px solid #FF9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .example {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left: 5px solid #4CAF50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        ul, ol {
+            margin: 10px 0 10px 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .formula {
+            background: #f8f9fa;
+            border: 2px solid #8B4513;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+        }
+
+        .rock-type {
+            display: inline-block;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .igneous { background: #d32f2f; }
+        .sedimentary { background: #ffa726; color: #333; }
+        .metamorphic { background: #7b1fa2; }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-item {
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+            border-radius: 10px;
+            border-left: 5px solid #8B4513;
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            color: #8B4513;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .chapter-header h2 {
+                font-size: 1.2em;
+            }
+
+            .chapter-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🪨 Géologie</h1>
+        <p>Science de la Terre, des roches et des processus géologiques</p>
+        <a href="index.html" class="nav-back">← Retour au menu</a>
+    </div>
+
+    <div class="container">
+        <!-- Chapitre 1: Structure interne de la Terre -->
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 1 : Structure interne et composition de la Terre</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <div class="definition">
+                    <strong>Définition :</strong> La <strong>géologie</strong> est la science qui étudie la composition, la structure, l'histoire et les processus physiques de la Terre et des autres corps célestes solides.
+                </div>
+
+                <h3>1.1 Structure interne de la Terre</h3>
+                <p>La Terre est composée de plusieurs couches concentriques définies par discontinuités sismiques :</p>
+
+                <table>
+                    <tr>
+                        <th>Couche</th>
+                        <th>Profondeur</th>
+                        <th>Composition</th>
+                        <th>État</th>
+                        <th>Température</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Croûte continentale</strong></td>
+                        <td>0-70 km</td>
+                        <td>Granite (Si, Al, O)</td>
+                        <td>Solide</td>
+                        <td>15-500°C</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Croûte océanique</strong></td>
+                        <td>0-10 km</td>
+                        <td>Basalte (Si, O, Fe, Mg)</td>
+                        <td>Solide</td>
+                        <td>2-500°C</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Manteau supérieur</strong></td>
+                        <td>70-660 km</td>
+                        <td>Péridotite (Olivine, pyroxène)</td>
+                        <td>Solide ductile</td>
+                        <td>500-1600°C</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Manteau inférieur</strong></td>
+                        <td>660-2900 km</td>
+                        <td>Silicates de Mg, Fe</td>
+                        <td>Solide (visqueux)</td>
+                        <td>1600-3500°C</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Noyau externe</strong></td>
+                        <td>2900-5150 km</td>
+                        <td>Fe liquide + Ni, S, O</td>
+                        <td>Liquide</td>
+                        <td>3500-5000°C</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Noyau interne</strong></td>
+                        <td>5150-6371 km</td>
+                        <td>Fe solide + Ni</td>
+                        <td>Solide</td>
+                        <td>5000-6000°C</td>
+                    </tr>
+                </table>
+
+                <div class="important">
+                    <strong>Discontinuités sismiques majeures :</strong>
+                    <ul>
+                        <li><strong>Discontinuité de Mohorovičić (Moho)</strong> : 70 km (continent) / 10 km (océan) - sépare croûte et manteau</li>
+                        <li><strong>Discontinuité de Gutenberg</strong> : 2900 km - sépare manteau et noyau</li>
+                        <li><strong>Discontinuité de Lehmann</strong> : 5150 km - sépare noyau externe et interne</li>
+                    </ul>
+                </div>
+
+                <h3>1.2 Lithosphère et asthénosphère</h3>
+
+                <h4>1.2.1 Lithosphère</h4>
+                <div class="definition">
+                    <strong>Lithosphère</strong> : Couche rigide externe comprenant la croûte et le manteau lithosphérique (jusqu'à ~100-200 km). Épaisseur variable : épaisse sous les continents (200 km), fine sous les océans (50 km).
+                </div>
+
+                <p>Caractéristiques :</p>
+                <ul>
+                    <li>Rigidité mécanique élevée</li>
+                    <li>Température < 1300°C (solidus)</li>
+                    <li>Découpée en plaques tectoniques</li>
+                    <li>Densité croûte continentale : 2,7 g/cm³</li>
+                    <li>Densité croûte océanique : 3,0 g/cm³</li>
+                </ul>
+
+                <h4>1.2.2 Asthénosphère</h4>
+                <div class="definition">
+                    <strong>Asthénosphère</strong> : Couche du manteau supérieur (100-660 km) partiellement fondue (1-5% de liquide), ductile, permettant le déplacement des plaques lithosphériques.
+                </div>
+
+                <p>Propriétés :</p>
+                <ul>
+                    <li>Viscosité : 10^18 à 10^21 Pa·s (vs 10^25 pour lithosphère)</li>
+                    <li>Convection mantellique active</li>
+                    <li>Source des magmas basaltiques (MORB)</li>
+                </ul>
+
+                <h3>1.3 Isostasie</h3>
+                <p>Principe d'équilibre hydrostatique entre croûte et manteau ductile :</p>
+
+                <div class="formula">
+                    <strong>Principe d'Airy :</strong><br>
+                    Racine = H × (ρc / (ρm - ρc))<br>
+                    Avec H = hauteur de la montagne, ρc = densité croûte, ρm = densité manteau
+                </div>
+
+                <div class="example">
+                    <strong>Exemple :</strong> Une chaîne de montagnes de 3 km d'altitude avec croûte de 30 km de densité 2,7 g/cm³ sur manteau de 3,3 g/cm³ possède une racine de :
+                    <br>Racine = 3 × (2,7 / 0,6) = 13,5 km
+                    <br>Épaisseur totale croûte sous la montagne : 30 + 13,5 = 43,5 km
+                </div>
+            </div>
+        </div>
+
+        <!-- Chapitre 2: Les roches -->
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 2 : Les roches et le cycle géologique</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <h3>2.1 Classification des roches</h3>
+
+                <div class="diagram" style="text-align: center; padding: 20px; background: #f5f5f5; border-radius: 10px; margin: 15px 0;">
+                    <span class="rock-type igneous">🌋 MAGMATIQUES</span>
+                    <span style="font-size: 2em;">↔️</span>
+                    <span class="rock-type metamorphic">⚡ MÉTAMORPHIQUES</span>
+                    <span style="font-size: 2em;">↔️</span>
+                    <span class="rock-type sedimentary">💧 SÉDIMENTAIRES</span>
+                    <br><br>
+                    <em>Cycle des roches : chaque type peut se transformer en un autre</em>
+                </div>
+
+                <h4>2.1.1 Roches magmatiques (ignées)</h4>
+                <p>Formées par refroidissement et cristallisation du magma :</p>
+
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Texture</th>
+                        <th>Minéraux</th>
+                        <th>Exemples</th>
+                        <th>Environnement</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Plutoniques</strong><br>(intrusives)</td>
+                        <td>Grenue (cristaux visibles)</td>
+                        <td>Quartz, feldspaths, mica</td>
+                        <td>Granite, Diorite, Gabbro</td>
+                        <td>Refroidissement lent en profondeur</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Volcaniques</strong><br>(effusives)</td>
+                        <td>Microgrenue ou vitreuse</td>
+                        <td>Plagioclase, pyroxène, olivine</td>
+                        <td>Basalte, Andésite, Rhyolite</td>
+                        <td>Refroidissement rapide en surface</td>
+                    </tr>
+                </table>
+
+                <div class="important">
+                    <strong>Suites magmatiques :</strong>
+                    <ul>
+                        <li><strong>Série calco-alcaline</strong> : Basalte → Andésite → Dacite → Rhyolite (subduction)</li>
+                        <li><strong>Série tholéiitique</strong> : Basalte tholéiitique dominant (dorsales, points chauds)</li>
+                        <li><strong>Série alkaline</strong> : Basanite, phonolite (rift, îles océaniques)</li>
+                    </ul>
+                </div>
+
+                <h4>2.1.2 Roches sédimentaires</h4>
+                <p>Formées par accumulation et diagénèse de sédiments :</p>
+
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Origine</th>
+                        <th>Exemples</th>
+                        <th>Caractéristiques</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Détritiques</strong></td>
+                        <td>Fragments de roches préexistantes</td>
+                        <td>Conglomérat, Grès, Argilite</td>
+                        <td>Stratification, clasticité</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Chimiques</strong></td>
+                        <td>Précipitation minérale</td>
+                        <td>Calcaire, Gypse, Sel gemme</td>
+                        <td>Cristallisation en milieu confiné</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Biogènes</strong></td>
+                        <td>Restes organiques</td>
+                        <td>Calcaire coquillier, Charbon, Pétrole</td>
+                        <td>Fossiles fréquents</td>
+                    </tr>
+                </table>
+
+                <div class="example">
+                    <strong>Classification des sédiments détritiques :</strong>
+                    <ul>
+                        <li><strong>Blocs</strong> : > 256 mm (rochers)</li>
+                        <li><strong>Galets</strong> : 2-256 mm</li>
+                        <li><strong>Sable</strong> : 0,062-2 mm</li>
+                        <li><strong>Limon</strong> : 0,004-0,062 mm</li>
+                        <li><strong>Argile</strong> : < 0,004 mm</li>
+                    </ul>
+                </div>
+
+                <h4>2.1.3 Roches métamorphiques</h4>
+                <p>Formées par transformation de roches existantes sous l'effet de la chaleur et/ou pression :</p>
+
+                <table>
+                    <tr>
+                        <th>Roche initiale</th>
+                        <th>Métamorphisme faible</th>
+                        <th>Métamorphisme moyen</th>
+                        <th>Métamorphisme fort</th>
+                    </tr>
+                    <tr>
+                        <td>Granite</td>
+                        <td>—</td>
+                        <td>Gneiss</td>
+                        <td>Migmatite</td>
+                    </tr>
+                    <tr>
+                        <td>Basalte</td>
+                        <td>Schiste vert</td>
+                        <td>Amphibolite</td>
+                        <td>Éclogite</td>
+                    </tr>
+                    <tr>
+                        <td>Calcaire</td>
+                        <td>Marbre</td>
+                        <td>Marbre</td>
+                        <td>Marbre</td>
+                    </tr>
+                    <tr>
+                        <td>Argile</td>
+                        <td>Ardoise</td>
+                        <td>Schiste</td>
+                        <td>Gneiss</td>
+                    </tr>
+                    <tr>
+                        <td>Grès</td>
+                        <td>Quartzite</td>
+                        <td>Quartzite</td>
+                        <td>Quartzite</td>
+                    </tr>
+                </table>
+
+                <div class="important">
+                    <strong>Faciès métamorphiques (Pression vs Température) :</strong>
+                    <ul>
+                        <li><strong>Zeolite</strong> : P faible, T faible</li>
+                        <li><strong>Schistes verts</strong> : P moyen, T moyen</li>
+                        <li><strong>Amphibolite</strong> : P moyen-élevé, T élevé</li>
+                        <li><strong>Granulite</strong> : P élevé, T très élevé</li>
+                        <li><strong>Éclogite</strong> : P très élevé, T élevé</li>
+                    </ul>
+                </div>
+
+                <h3>2.2 Minéraux principaux</h3>
+
+                <table>
+                    <tr>
+                        <th>Minéral</th>
+                        <th>Formule</th>
+                        <th>Groupe</th>
+                        <th>Dureté (Mohs)</th>
+                        <th>Utilisation</th>
+                    </tr>
+                    <tr>
+                        <td>Quartz</td>
+                        <td>SiO₂</td>
+                        <td>Tectosilicate</td>
+                        <td>7</td>
+                        <td>Verre, électronique, bijouterie</td>
+                    </tr>
+                    <tr>
+                        <td>Feldspath</td>
+                        <td>KAlSi₃O₈ - NaAlSi₃O₈</td>
+                        <td>Tectosilicate</td>
+                        <td>6</td>
+                        <td>Céramique, verre</td>
+                    </tr>
+                    <tr>
+                        <td>Mica</td>
+                        <td>K(Mg,Fe)₃AlSi₃O₁₀(OH)₂</td>
+                        <td>Phyllosilicate</td>
+                        <td>2,5-3</td>
+                        <td>Isolant électrique, cosmétiques</td>
+                    </tr>
+                    <tr>
+                        <td>Amphibole</td>
+                        <td>Complexe (Ca,Na)₂(Mg,Fe)₄AlSi₈O₂₂(OH)₂</td>
+                        <td>Inosilicate</td>
+                        <td>5-6</td>
+                        <td>Amiante (fibres), construction</td>
+                    </tr>
+                    <tr>
+                        <td>Pyroxène</td>
+                        <td>(Mg,Fe)SiO₃</td>
+                        <td>Inosilicate</td>
+                        <td>5-6</td>
+                        <td>Indicateur pétrologique</td>
+                    </tr>
+                    <tr>
+                        <td>Olivine</td>
+                        <td>(Mg,Fe)₂SiO₄</td>
+                        <td>Nésosilicate</td>
+                        <td>6,5-7</td>
+                        <td>Peridot (gemme), réfractaire</td>
+                    </tr>
+                    <tr>
+                        <td>Calcite</td>
+                        <td>CaCO₃</td>
+                        <td>Carbonate</td>
+                        <td>3</td>
+                        <td>Ciment, chaux, marbre</td>
+                    </tr>
+                </table>
+
+                <h3>2.3 Cycle géologique</h3>
+                <p>Processus continus de transformation des roches :</p>
+
+                <div class="important">
+                    <strong>Étapes du cycle :</strong>
+                    <ol>
+                        <li><strong>Magma</strong> → refroidissement → <strong>Roche magmatique</strong></li>
+                        <li><strong>Érosion</strong> (mécanique, chimique) → sédiments</li>
+                        <li><strong>Transport</strong> (eau, vent, glace) → dépôt</li>
+                        <li><strong>Diagénèse</strong> (compaction, cimentation) → <strong>Roche sédimentaire</strong></li>
+                        <li><strong>Enterrement</strong> → augmentation P et T → <strong>Métamorphisme</strong></li>
+                        <li><strong>Fusion partielle</strong> → retour au magma</li>
+                    </ol>
+                </div>
+
+                <div class="formula">
+                    <strong>Taux de renouvellement :</strong><br>
+                    - Croûte océanique : renouvelée en ~200 Ma<br>
+                    - Croûte continentale : âge moyen ~2 Ga<br>
+                    - Cycle complet : 100-500 Ma
+                </div>
+            </div>
+        </div>
+
+        <!-- Chapitre 3: Tectonique des plaques -->
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 3 : Tectonique des plaques et dynamique terrestre</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <h3>3.1 Théorie de la tectonique des plaques</h3>
+
+                <div class="definition">
+                    <strong>Définition :</strong> La <strong>tectonique des plaques</strong> est le modèle scientifique décrivant la dynamique de la lithosphère terrestre divisée en plaques rigides qui se déplacent sur l'asthénosphère ductile.
+                </div>
+
+                <h4>3.1.1 Principales plaques lithosphériques</h4>
+                <table>
+                    <tr>
+                        <th>Plaque</th>
+                        <th>Type</th>
+                        <th>Surface</th>
+                        <th>Déplacement</th>
+                    </tr>
+                    <tr>
+                        <td>Pacifique</td>
+                        <td>Océanique</td>
+                        <td>103 Mkm²</td>
+                        <td>~8 cm/an vers NW</td>
+                    </tr>
+                    <tr>
+                        <td>Eurasienne</td>
+                        <td>Mixte</td>
+                        <td>67 Mkm²</td>
+                        <td>~2 cm/an vers E</td>
+                    </tr>
+                    <tr>
+                        <td>Africaine</td>
+                        <td>Mixte</td>
+                        <td>61 Mkm²</td>
+                        <td>~2 cm/an vers NE</td>
+                    </tr>
+                    <tr>
+                        <td>Indo-Australienne</td>
+                        <td>Mixte</td>
+                        <td>59 Mkm²</td>
+                        <td>~6 cm/an vers NE</td>
+                    </tr>
+                    <tr>
+                        <td>Américaine du Nord</td>
+                        <td>Mixte</td>
+                        <td>76 Mkm²</td>
+                        <td>~2 cm/an vers W</td>
+                    </tr>
+                    <tr>
+                        <td>Américaine du Sud</td>
+                        <td>Mixte</td>
+                        <td>43 Mkm²</td>
+                        <td>~3 cm/an vers W</td>
+                    </tr>
+                    <tr>
+                        <td>Antarctique</td>
+                        <td>Mixte</td>
+                        <td>60 Mkm²</td>
+                        <td>Rotation autour du pôle</td>
+                    </tr>
+                </table>
+
+                <h4>3.1.2 Types de marges plaque</h4>
+
+                <div class="important">
+                    <strong>A. Marges divergentes (constructives)</strong>
+                    <p>Deux plaques s'éloignent, création de lithosphère nouvelle.</p>
+                    <ul>
+                        <li><strong>Dorsales océaniques</strong> : ride médio-atlantique, dorsale du Pacifique Est</li>
+                        <li><strong>Rifts continentaux</strong> : Rift Est-Africain, Vallée du Grand Rift</li>
+                        <li><strong>Processus</strong> : remontée mantellique adiabatique → fusion partielle → basaltes MORB</li>
+                        <li><strong>Taux d'expansion</strong> : 1-10 cm/an</li>
+                    </ul>
+                </div>
+
+                <div class="important">
+                    <strong>B. Marges convergentes (destructives)</strong>
+                    <p>Deux plaques se rapprochent, destruction de lithosphère.</p>
+                    <ul>
+                        <li><strong>Océan-océan</strong> : Fosse des Mariannes, Japon (îles volcaniques)</li>
+                        <li><strong>Océan-continent</strong> : Andes, Cascades (cordillère volcanique)</li>
+                        <li><strong>Continent-continent</strong> : Himalaya, Alpes (chaînes de collision)</li>
+                        <li><strong>Processus</strong> : subduction → fusion flux → magmas calco-alcalins</li>
+                    </ul>
+                </div>
+
+                <div class="important">
+                    <strong>C. Marges transformantes (conservatives)</strong>
+                    <p>Déplacement latéral sans création ni destruction de lithosphère.</p>
+                    <ul>
+                        <li><strong>Failles transformantes</strong> : San Andreas (Californie), faille Nord-Anatolienne</li>
+                        <li><strong>Sismicité</strong> : séismes superficiels (< 20 km), parfois dévastateurs</li>
+                        <li><strong>Transformantes de dorsale</strong> : décalent les segments de dorsale</li>
+                    </ul>
+                </div>
+
+                <h3>3.2 Forces motrices</h3>
+
+                <h4>3.2.1 Convection mantellique</h4>
+                <p>Moteur principal de la tectonique des plaques :</p>
+
+                <div class="formula">
+                    <strong>Nombre de Rayleigh (Ra) :</strong><br>
+                    Ra = (g × α × ΔT × d³) / (ν × κ)<br>
+                    Avec g = gravité, α = dilatation thermique, ΔT = gradient thermique, d = épaisseur, ν = viscosité cinématique, κ = diffusivité thermique<br>
+                    <strong>Convection si Ra > 10³-10⁴</strong>
+                </div>
+
+                <h4>3.2.2 Forces de plaque</h4>
+                <table>
+                    <tr>
+                        <th>Force</th>
+                        <th>Origine</th>
+                        <th>Effet</th>
+                    </tr>
+                    <tr>
+                        <td>Poussée de ridge</td>
+                        <td>Topographie élevée des dorsales</td>
+                        <td>Pousse les plaques vers l'extérieur</td>
+                    </tr>
+                    <tr>
+                        <td>Force de slab pull</td>
+                        <td>Plaque subductée plus dense</td>
+                        <td>Tire la plaque vers la subduction (dominant)</td>
+                    </tr>
+                    <tr>
+                        <td>Force de slab suction</td>
+                        <td>Entraînement par la subduction</td>
+                        <td>Tire la plaque continentale</td>
+                    </tr>
+                    <tr>
+                        <td>Frottement basal</td>
+                        <td>Interaction lithosphère-asthénosphère</td>
+                        <td>Résistance au mouvement</td>
+                    </tr>
+                </table>
+
+                <h3>3.3 Phénomènes associés</h3>
+
+                <h4>3.3.1 Séismes</h4>
+                <div class="definition">
+                    <strong>Séisme</strong> : Libération brutale d'énergie élastique accumulée par déformation des roches, généralement sur des failles.
+                </div>
+
+                <table>
+                    <tr>
+                        <th>Échelle</th>
+                        <th>Mesure</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>Richter (Magnitude locale)</td>
+                        <td>Amplitude ondes</td>
+                        <td>Logarithmique, saturée à M>6,5</td>
+                    </tr>
+                    <tr>
+                        <td>Moment sismique (Mw)</td>
+                        <td>Énergie libérée</td>
+                        <td>Mw = (2/3)log₁₀(M₀) - 10,7 (M₀ en N·m)</td>
+                    </tr>
+                    <tr>
+                        <td>Intensité (MSK/Mercalli)</td>
+                        <td>Effets observés</td>
+                        <td>I-XII, dépend de la distance et du site</td>
+                    </tr>
+                </table>
+
+                <div class="example">
+                    <strong>Grands séismes historiques :</strong>
+                    <ul>
+                        <li>Valdivia 1960 (Chili) : Mw 9,5 — plus grand jamais enregistré</li>
+                        <li>Sumatra 2004 : Mw 9,1 — tsunami meurtrier (230 000 morts)</li>
+                        <li>Tōhoku 2011 (Japon) : Mw 9,0 — accident nucléaire de Fukushima</li>
+                    </ul>
+                </div>
+
+                <h4>3.3.2 Volcanisme</h4>
+
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Localisation</th>
+                        <th>Magma</th>
+                        <th>Éruption</th>
+                        <th>Exemples</th>
+                    </tr>
+                    <tr>
+                        <td>Dorsale</td>
+                        <td>Océans (rift)</td>
+                        <td>Basalte tholéiitique</td>
+                        <td>Effusive, douce</td>
+                        <td>Islande, Hawaii</td>
+                    </tr>
+                    <tr>
+                        <td>Subduction</td>
+                        <td>Ceinture de feu</td>
+                        <td>Andésite, dacite</td>
+                        <td>Explosive</td>
+                        <td>Etna, Mont St Helens</td>
+                    </tr>
+                    <tr>
+                        <td>Point chaud</td>
+                        <td>Intraplaque</td>
+                        <td>Basalte alkaline</td>
+                        <td>Effusive</td>
+                        <td>Hawaii, Yellowstone</td>
+                    </tr>
+                    <tr>
+                        <td>Rift continental</td>
+                        <td>Extension continentale</td>
+                        <td>Basalte, rhyolite</td>
+                        <td>Mixte</td>
+                        <td>Erta Ale (Éthiopie)</td>
+                    </tr>
+                </table>
+
+                <h4>3.3.3 Cycle de Wilson</h4>
+                <p>Évolution cyclique des océans :</p>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">1. Embryon (Rift)</div>
+                        <p>Gonflement mantellique, fracturation continentale. Ex : Rift Est-Africain</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2. Océan naissant</div>
+                        <p>Ouverture océanique, marge passive. Ex : Mer Rouge (~30 Ma)</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">3. Océan mature</div>
+                        <p>Dorsale active, bassin océanique étendu. Ex : Atlantique</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">4. Océan déclinant</div>
+                        <p>Subduction initiée, fermeture. Ex : Pacifique (déclinant)</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">5. Océan terminal</div>
+                        <p>Reste de mer fermée par collisions. Ex : Méditerranée</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">6. Suture</div>
+                        <p>Collision continentale, chaîne de montagnes. Ex : Himalaya (suture Inde-Asie)</p>
+                    </div>
+                </div>
+
+                <h3>3.4 Géologie structurale</h3>
+
+                <h4>3.4.1 Déformations fragiles</h4>
+                <ul>
+                    <li><strong>Failles</strong> : discontinuité avec déplacement
+                        <ul>
+                            <li>Faille normale (extension)</li>
+                            <li>Faille inverse (compression)</li>
+                            <li>Décrochement (cisaillement)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Fractures</strong> : discontinuité sans déplacement (joints)</li>
+                </ul>
+
+                <h4>3.4.2 Déformations ductiles</h4>
+                <ul>
+                    <li><strong>Plis</strong> : ondulations des couches
+                        <ul>
+                            <li>Anticlinaux (crêtes) et synclinaux (gouttières)</li>
+                            <li>Plis déversés, couchés, chevauchants</li>
+                        </ul>
+                    </li>
+                    <li><strong>Foliation</strong> : orientation préférentielle des minéraux</li>
+                    <li><strong>Lineation</strong> : orientation linéaire des minéraux</li>
+                </ul>
+
+                <div class="formula">
+                    <strong>Relations contrainte-déformation :</strong><br>
+                    ε̇ = A × σⁿ × exp(-Q/RT)<br>
+                    Loi de puissance (creep) avec ε̇ = taux de déformation, σ = contrainte, Q = énergie d'activation, T = température
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleChapter(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstChapter = document.querySelector('.chapter-header');
+            if (firstChapter) {
+                toggleChapter(firstChapter);
+            }
+        });
+    </script>
+</body>
+</html>

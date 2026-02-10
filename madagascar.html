@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Géographie de Madagascar - GeoMaster Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            color: #FF6B35;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .nav-back {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #FF6B35;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-back:hover {
+            background: #F7931E;
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .chapter {
+            background: white;
+            margin: 30px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .chapter-header {
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .chapter-header:hover {
+            background: linear-gradient(135deg, #F7931E 0%, #FF6B35 100%);
+        }
+
+        .chapter-header h2 {
+            font-size: 1.5em;
+        }
+
+        .toggle-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
+        }
+
+        .chapter-content {
+            padding: 25px;
+            display: none;
+        }
+
+        .chapter-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h3 {
+            color: #FF6B35;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+            border-bottom: 2px solid #FF6B35;
+            padding-bottom: 5px;
+        }
+
+        h4 {
+            color: #F7931E;
+            margin: 15px 0 8px 0;
+            font-size: 1.1em;
+        }
+
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+
+        .definition {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 5px solid #FF9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .important {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left: 5px solid #4CAF50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .example {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 5px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        ul, ol {
+            margin: 10px 0 10px 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .stat-box {
+            display: inline-block;
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            color: white;
+            padding: 15px 20px;
+            margin: 10px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .region-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #FF6B35;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .chapter-header h2 {
+                font-size: 1.2em;
+            }
+
+            .chapter-content {
+                padding: 15px;
+            }
+
+            .stat-box {
+                display: block;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌺 Géographie de Madagascar</h1>
+        <p>Grande Île, biodiversité unique et enjeux du développement</p>
+        <a href="index.html" class="nav-back">← Retour au menu</a>
+    </div>
+
+    <div class="container">
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 1 : Présentation générale et cadre physique</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <div style="text-align: center; margin: 20px 0;">
+                    <div class="stat-box">
+                        <span class="stat-number">587 041</span>
+                        <span class="stat-label">km² (4ème île monde)</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">28 M</span>
+                        <span class="stat-label">habitants (2023)</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">88%</span>
+                        <span class="stat-label">endémisme faune</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">1 600 km</span>
+                        <span class="stat-label">longueur N-S</span>
+                    </div>
+                </div>
+
+                <div class="definition">
+                    <strong>Situation géographique :</strong> Madagascar est située dans l'océan Indien sud-ouest, séparée de l'Afrique continentale par le canal du Mozambique (400 km au plus étroit). Position : 11°S - 25°S, 43°E - 51°E.
+                </div>
+
+                <h3>1.1 Géologie et relief</h3>
+                <p>Madagascar s'est détachée du supercontinent Gondwana il y a environ 160 millions d'années, puis de l'Inde il y a 88 millions d'années. Cette isolation explique son endémisme exceptionnel.</p>
+
+                <table>
+                    <tr>
+                        <th>Domaine géologique</th>
+                        <th>Localisation</th>
+                        <th>Caractéristiques</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Bas plateau</strong></td>
+                        <td>Ouest et Sud</td>
+                        <td>Sédiments du Secondaire et Tertiaire, calcaires, grès</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hauts plateaux</strong></td>
+                        <td>Centre</td>
+                        <td>Cristallin et métamorphique précambrien, granite, gneiss</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Chaînes orientales</strong></td>
+                        <td>Est</td>
+                        <td>Système cristallin, précipitations maximales</td>
+                    </tr>
+                </table>
+
+                <div class="region-card">
+                    <strong>🏔️ Les Hauts Plateaux (Central)</strong><br>
+                    Altitude : 800-1500 m (point culminant : Maromokotro 2 876 m)<br>
+                    Topographie : vallées, collines, massifs granitiques<br>
+                    Climat : tempéré tropical (altitude)<br>
+                    Population : dense (Antananarivo, Antsirabe)
+                </div>
+
+                <div class="region-card">
+                    <strong>🌊 L'Est (Côte orientale)</strong><br>
+                    Étroite bande côtière entre l'océan et les escarpements<br>
+                    Forêt humide sempervirente (Sambirano, Masoala)<br>
+                    Climat : équatorial humide (>3000 mm/an)<br>
+                    Difficile d'accès, faiblement peuplé
+                </div>
+
+                <div class="region-card">
+                    <strong>🌵 L'Ouest et le Sud</strong><br>
+                    Plaines sédimentaires et bassins (Tuléar, Majunga)<br>
+                    Climat : tropical sec à semi-aride<br>
+                    Végétation : forêt sèche, savane, épineux (Didierea)<br>
+                    Ports et économie côtière
+                </div>
+
+                <h3>1.2 Climat et hydrologie</h3>
+
+                <table>
+                    <tr>
+                        <th>Saison</th>
+                        <th>Période</th>
+                        <th>Caractéristiques</th>
+                        <th>Zone concernée</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Hivernage</strong></td>
+                        <td>Novembre - Avril</td>
+                        <td>Alizés de NO humides, cyclones</td>
+                        <td>Est et Nord-Est principalement</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sécheresse</strong></td>
+                        <td>Mai - Octobre</td>
+                        <td>Alizés de SE secs, froid sur les Hauts Plateaux</td>
+                        <td>Tout le pays, accentué Ouest</td>
+                    </tr>
+                </table>
+
+                <div class="important">
+                    <strong>Gradient pluviométrique :</strong><br>
+                    - Est : 2000-3500 mm/an (Masora)<br>
+                    - Hauts Plateaux : 1200-1600 mm/an (Tana)<br>
+                    - Ouest : 800-1200 mm/an<br>
+                    - Sud : < 600 mm/an (semi-désert)
+                </div>
+            </div>
+        </div>
+
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 2 : Biodiversité exceptionnelle</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <div class="definition">
+                    <strong>Hotspot de biodiversité :</strong> Madagascar est l'un des 36 hotspots mondiaux avec <strong>5% de la biodiversité mondiale</strong> sur moins de 0,5% des terres émergées.
+                </div>
+
+                <h3>2.1 Lémuriens (Primates endémiques)</h3>
+                <table>
+                    <tr>
+                        <th>Famille</th>
+                        <th>Représentants</th>
+                        <th>Statut</th>
+                    </tr>
+                    <tr>
+                        <td>Cheirogaleidae</td>
+                        <td>Microcèbes, Lépilémurs</td>
+                        <td>Plusieurs CR/EN</td>
+                    </tr>
+                    <tr>
+                        <td>Lemuridae</td>
+                        <td>Makis, Lémurs catta</td>
+                        <td>Maki catta EN</td>
+                    </tr>
+                    <tr>
+                        <td>Indriidae</td>
+                        <td>Indri, Sifakas, Avahis</td>
+                        <td>Indri CR</td>
+                    </tr>
+                    <tr>
+                        <td>Daubentoniidae</td>
+                        <td>Aye-aye</td>
+                        <td>EN, persécuté</td>
+                    </tr>
+                </table>
+
+                <div class="important">
+                    <strong>Menaces :</strong> Déforestation (90% de la forêt primaire perdue), chasse (brousse), mines, changement climatique. 94% des lémuriens sont menacés d'extinction (UICN 2020).
+                </div>
+
+                <h3>2.2 Autres groupes endémiques</h3>
+                <table>
+                    <tr>
+                        <th>Groupe</th>
+                        <th>Espèces</th>
+                        <th>Endémisme</th>
+                    </tr>
+                    <tr>
+                        <td>Oiseaux</td>
+                        <td>283</td>
+                        <td>210 (74%)</td>
+                    </tr>
+                    <tr>
+                        <td>Reptiles</td>
+                        <td>420</td>
+                        <td>>95%</td>
+                    </tr>
+                    <tr>
+                        <td>Amphibiens</td>
+                        <td>300+</td>
+                        <td>99%</td>
+                    </tr>
+                    <tr>
+                        <td>Plantes</td>
+                        <td>12 000</td>
+                        <td>80%</td>
+                    </tr>
+                </table>
+
+                <div class="example">
+                    <strong>Baobabs endémiques :</strong> 6 espèces dont Adansonia grandidieri (allée des Baobabs à Morondava), A. suarezensis (nord), A. rubrostipa (fony).
+                </div>
+            </div>
+        </div>
+
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 3 : Population et développement</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <h3>3.1 Démographie</h3>
+                <table>
+                    <tr>
+                        <th>Groupe ethnique</th>
+                        <th>% Population</th>
+                        <th>Localisation</th>
+                    </tr>
+                    <tr>
+                        <td>Merina</td>
+                        <td>26%</td>
+                        <td>Hauts Plateaux (Antananarivo)</td>
+                    </tr>
+                    <tr>
+                        <td>Betsimisaraka</td>
+                        <td>15%</td>
+                        <td>Côte Est</td>
+                    </tr>
+                    <tr>
+                        <td>Betsileo</td>
+                        <td>12%</td>
+                        <td>Hauts Plateaux Sud</td>
+                    </tr>
+                    <tr>
+                        <td>Sakalava</td>
+                        <td>6%</td>
+                        <td>Ouest et Nord-Ouest</td>
+                    </tr>
+                </table>
+
+                <div class="important">
+                    <strong>Indicateurs démographiques (2023) :</strong><br>
+                    - Taux de croissance : 2,4% / an<br>
+                    - Fécondité : 4,1 enfants/femme<br>
+                    - Population urbaine : 39%<br>
+                    - Espérance de vie : 67 ans
+                </div>
+
+                <h3>3.2 Économie</h3>
+                <table>
+                    <tr>
+                        <th>Secteur</th>
+                        <th>Contribution PIB</th>
+                        <th>Emploi</th>
+                    </tr>
+                    <tr>
+                        <td>Agriculture</td>
+                        <td>25%</td>
+                        <td>70%</td>
+                    </tr>
+                    <tr>
+                        <td>Industrie</td>
+                        <td>20%</td>
+                        <td>10%</td>
+                    </tr>
+                    <tr>
+                        <td>Services</td>
+                        <td>55%</td>
+                        <td>20%</td>
+                    </tr>
+                </table>
+
+                <div class="example">
+                    <strong>Exportations majeures :</strong><br>
+                    - Vanille : 1er producteur mondial (80% qualité)<br>
+                    - Ylang-ylang : 1er mondial<br>
+                    - Girofle : 1er mondial<br>
+                    - Nickel-cobalt : Ambatovy (plus grande mine intégrée)<br>
+                    - Ilménite : QIT Madagascar Minerals
+                </div>
+
+                <h3>3.3 Défis</h3>
+                <ul>
+                    <li>Pauvreté : IDH 0,501 (173/191)</li>
+                    <li>Vulnérabilité climatique : cyclones, sécheresses</li>
+                    <li>Déforestation : 100 000 ha/an</li>
+                    <li>Insécurité alimentaire : 1,5 M en situation critique (sud)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleChapter(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstChapter = document.querySelector('.chapter-header');
+            if (firstChapter) toggleChapter(firstChapter);
+        });
+    </script>
+</body>
+</html>

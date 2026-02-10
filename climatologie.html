@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climatologie - GeoMaster Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .nav-back {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-back:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .chapter {
+            background: white;
+            margin: 30px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .chapter-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .chapter-header:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .chapter-header h2 {
+            font-size: 1.5em;
+        }
+
+        .toggle-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
+        }
+
+        .chapter-content {
+            padding: 25px;
+            display: none;
+        }
+
+        .chapter-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h3 {
+            color: #667eea;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 5px;
+        }
+
+        h4 {
+            color: #764ba2;
+            margin: 15px 0 8px 0;
+            font-size: 1.1em;
+        }
+
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+
+        .definition {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 5px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .important {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 5px solid #FF9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .example {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left: 5px solid #4CAF50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        ul, ol {
+            margin: 10px 0 10px 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .formula {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+        }
+
+        .diagram {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px dashed #9c27b0;
+        }
+
+        .climate-zone {
+            display: inline-block;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .equatorial { background: #2e7d32; }
+        .tropical { background: #66bb6a; }
+        .arid { background: #ff8f00; }
+        .mediterranean { background: #42a5f5; }
+        .temperate { background: #78909c; }
+        .continental { background: #5e35b1; }
+        .polar { background: #b0bec5; color: #333; }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .chapter-header h2 {
+                font-size: 1.2em;
+            }
+
+            .chapter-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌤️ Climatologie</h1>
+        <p>Science de l'atmosphère et des climats</p>
+        <a href="index.html" class="nav-back">← Retour au menu</a>
+    </div>
+
+    <div class="container">
+        <!-- Chapitre 1: Introduction à la climatologie -->
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 1 : Introduction à la climatologie</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <div class="definition">
+                    <strong>Définition :</strong> La <strong>climatologie</strong> est la science qui étudie le climat, c'est-à-dire l'ensemble des conditions météorologiques moyennes et des variations d'un lieu sur une période longue (minimum 30 ans selon l'OMM).
+                </div>
+
+                <h3>1.1 Différence entre météorologie et climatologie</h3>
+                <table>
+                    <tr>
+                        <th>Critère</th>
+                        <th>Météorologie</th>
+                        <th>Climatologie</th>
+                    </tr>
+                    <tr>
+                        <td>Échelle temporelle</td>
+                        <td>Court terme (jours à semaines)</td>
+                        <td>Long terme (décennies à siècles)</td>
+                    </tr>
+                    <tr>
+                        <td>Objectif</td>
+                        <td>Prévision du temps</td>
+                        <td>Compréhension des régimes atmosphériques</td>
+                    </tr>
+                    <tr>
+                        <td>Méthodes</td>
+                        <td>Observations, modèles de prévision</td>
+                        <td>Statistiques, analyses de séries</td>
+                    </tr>
+                    <tr>
+                        <td>Applications</td>
+                        <td>Agriculture quotidienne, transport</td>
+                        <td>Aménagement du territoire, urbanisme</td>
+                    </tr>
+                </table>
+
+                <h3>1.2 Composition de l'atmosphère</h3>
+                <p>L'atmosphère terrestre est composée de plusieurs gaz :</p>
+
+                <table>
+                    <tr>
+                        <th>Gaz</th>
+                        <th>Formule</th>
+                        <th>% volume</th>
+                        <th>Rôle climatique</th>
+                    </tr>
+                    <tr>
+                        <td>Azote</td>
+                        <td>N₂</td>
+                        <td>78,08%</td>
+                        <td>Stable, peu actif</td>
+                    </tr>
+                    <tr>
+                        <td>Oxygène</td>
+                        <td>O₂</td>
+                        <td>20,95%</td>
+                        <td>Respiration, combustion</td>
+                    </tr>
+                    <tr>
+                        <td>Argon</td>
+                        <td>Ar</td>
+                        <td>0,93%</td>
+                        <td>Inerte</td>
+                    </tr>
+                    <tr>
+                        <td>Vapeur d'eau</td>
+                        <td>H₂O</td>
+                        <td>0-4% (variable)</td>
+                        <td>Effet de serre, cycle hydrologique</td>
+                    </tr>
+                    <tr>
+                        <td>Dioxyde de carbone</td>
+                        <td>CO₂</td>
+                        <td>0,04% (420 ppm)</td>
+                        <td>Principal GES anthropique</td>
+                    </tr>
+                    <tr>
+                        <td>Méthane</td>
+                        <td>CH₄</td>
+                        <td>1,9 ppm</td>
+                        <td>Puissant GES (×80 CO₂/20 ans)</td>
+                    </tr>
+                </table>
+
+                <div class="important">
+                    <strong>Couches de l'atmosphère :</strong>
+                    <ul>
+                        <li><strong>Troposphère</strong> (0-12 km) : où se produisent les phénomènes météorologiques, température décroissante avec l'altitude (-6,5°C/km)</li>
+                        <li><strong>Stratosphère</strong> (12-50 km) : contient l'ozone (O₃), température croissante avec l'altitude</li>
+                        <li><strong>Mésosphère</strong> (50-85 km) : température décroissante</li>
+                        <li><strong>Thermosphère</strong> (>85 km) : température très élevée mais pression quasi nulle</li>
+                    </ul>
+                </div>
+
+                <h3>1.3 Paramètres climatiques fondamentaux</h3>
+
+                <h4>1.3.1 La température</h4>
+                <p>La température de l'air dépend de plusieurs facteurs :</p>
+                <ul>
+                    <li><strong>Rayonnement solaire</strong> : principal facteur, varie avec la latitude</li>
+                    <li><strong>Altitude</strong> : gradient thermique vertical moyen de -6,5°C/km</li>
+                    <li><strong>Continentalité</strong> : les terres se chauffent/refroidissent plus vite que les océans</li>
+                    <li><strong>Couverture nuageuse</strong> : réfléchit le rayonnement solaire jour, retient les infrarouges nuit</li>
+                </ul>
+
+                <div class="formula">
+                    <strong>Bilan thermique simplifié :</strong><br>
+                    R<sub>net</sub> = R<sub>entrant</sub> - R<sub>sortant</sub><br>
+                    Où R<sub>entrant</sub> = rayonnement solaire absorbé + rayonnement atmosphérique<br>
+                    Et R<sub>sortant</sub> = rayonnement terrestre émis
+                </div>
+
+                <h4>1.3.2 La pression atmosphérique</h4>
+                <p>La pression décroît exponentiellement avec l'altitude. Au niveau de la mer : 1013,25 hPa (hectopascals).</p>
+
+                <div class="formula">
+                    <strong>Loi barométrique :</strong><br>
+                    P = P₀ × e^(-z/H)<br>
+                    Avec H = échelle de hauteur (~8,5 km) et z = altitude
+                </div>
+
+                <h4>1.3.3 L'humidité</h4>
+                <p>Mesures de l'humidité :</p>
+                <ul>
+                    <li><strong>Humidité absolue</strong> : masse de vapeur d'eau par unité de volume (g/m³)</li>
+                    <li><strong>Humidité relative</strong> : rapport entre pression partielle de vapeur et pression de saturation (%)</li>
+                    <li><strong>Point de rosée</strong> : température à laquelle l'air devient saturé</li>
+                </ul>
+
+                <div class="example">
+                    <strong>Exemple :</strong> À 20°C, l'air peut contenir maximalement 17,3 g/m³ de vapeur d'eau (saturation). S'il en contient 8,65 g/m³, l'humidité relative est de 50%.
+                </div>
+            </div>
+        </div>
+
+        <!-- Chapitre 2: Mécanismes atmosphériques -->
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 2 : Mécanismes atmosphériques et circulation</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <h3>2.1 Le bilan radiatif terrestre</h3>
+
+                <div class="diagram">
+                    <strong>Schéma du bilan radiatif :</strong><br><br>
+                    ☀️ <strong>Rayonnement solaire entrant :</strong> 340 W/m² (moyenne globale)<br>
+                    ↓ 30% réfléchis (albédo) → 100 W/m²<br>
+                    ↓ 70% absorbés → 240 W/m²<br><br>
+                    🌍 <strong>Rayonnement terrestre sortant :</strong> 240 W/m² (équilibre)<br>
+                    ↓ Mais la surface émet ~390 W/m²<br>
+                    ↓ Les GES réémettent 150 W/m² vers le bas<br>
+                    <br>
+                    <strong>Effet de serre naturel : +33°C</strong>
+                </div>
+
+                <div class="important">
+                    <strong>Albédo des surfaces :</strong>
+                    <ul>
+                        <li>Neige fraîche : 80-90%</li>
+                        <li>Glace : 50-70%</li>
+                        <li>Sable : 35-45%</li>
+                        <li>Forêt : 10-20%</li>
+                        <li>Océan : 5-10%</li>
+                        <li>Asphalte : 5-10%</li>
+                    </ul>
+                    Albédo moyen terrestre : ~30%
+                </div>
+
+                <h3>2.2 La circulation atmosphérique générale</h3>
+
+                <h4>2.2.1 Cellules de Hadley, Ferrel et Polaire</h4>
+                <p>La circulation atmosphérique est organisée en trois cellules dans chaque hémisphère :</p>
+
+                <table>
+                    <tr>
+                        <th>Cellule</th>
+                        <th>Latitude</th>
+                        <th>Mouvement</th>
+                        <th>Conséquences</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Hadley</strong></td>
+                        <td>0° - 30°</td>
+                        <td>Air chaud monte à l'équateur, descend aux tropiques</td>
+                        <td>Zone de convergence intertropicale (ZCIT), vents alizés</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ferrel</strong></td>
+                        <td>30° - 60°</td>
+                        <td>Cellule indirecte (thermiquement indirecte)</td>
+                        <td>Dépressions, vents d'ouest</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Polaire</strong></td>
+                        <td>60° - 90°</td>
+                        <td>Air froid descend aux pôles</td>
+                        <td>Vents polaires de l'est</td>
+                    </tr>
+                </table>
+
+                <div class="diagram">
+                    <strong>Carte mentale des vents dominants :</strong><br><br>
+                    🌐 Équateur : Zone de faiblesse des vents (pot-au-noir)<br>
+                    ↓<br>
+                    🌬️ Alizés du NE (N) / SE (S) : 0°-30°<br>
+                    ↓<br>
+                    🐴 Latitudes des chevaux : Hautes pressions, déserts<br>
+                    ↓<br>
+                    🌬️ Vents d'ouest : 30°-60°<br>
+                    ↓<br>
+                    ❄️ Pôles : Vents polaires de l'est
+                </div>
+
+                <h4>2.2.2 Force de Coriolis</h4>
+                <div class="definition">
+                    <strong>Effet Coriolis :</strong> Déviation apparente des masses d'air due à la rotation de la Terre (vers la droite dans l'hémisphère Nord, gauche dans le Sud).
+                </div>
+
+                <p>Conséquences majeures :</p>
+                <ul>
+                    <li>Déviation des vents alizés</li>
+                    <li>Rotation des dépressions (sens anti-horaire N, horaire S)</li>
+                    <li>Courants océaniques de bord ouest intenses</li>
+                </ul>
+
+                <h3>2.3 Les masses d'air et les fronts</h3>
+
+                <h4>2.3.1 Types de masses d'air</h4>
+                <table>
+                    <tr>
+                        <th>Code</th>
+                        <th>Type</th>
+                        <th>Caractéristiques</th>
+                        <th>Origine</th>
+                    </tr>
+                    <tr>
+                        <td>cA</td>
+                        <td>Continental arctique</td>
+                        <td>Très froide, très sèche</td>
+                        <td>Pôles, hiver</td>
+                    </tr>
+                    <tr>
+                        <td>cP</td>
+                        <td>Continental polaire</td>
+                        <td>Froide, sèche</td>
+                        <td>Canada, Sibérie</td>
+                    </tr>
+                    <tr>
+                        <td>mP</td>
+                        <td>Maritime polaire</td>
+                        <td>Fraîche, humide</td>
+                        <td>Latitudes moyennes océans</td>
+                    </tr>
+                    <tr>
+                        <td>cT</td>
+                        <td>Continental tropical</td>
+                        <td>Chaude, sèche</td>
+                        <td>Déserts (Sahara)</td>
+                    </tr>
+                    <tr>
+                        <td>mT</td>
+                        <td>Maritime tropical</td>
+                        <td>Chaude, humide</td>
+                        <td>Tropiques océans</td>
+                    </tr>
+                    <tr>
+                        <td>mE</td>
+                        <td>Maritime équatorial</td>
+                        <td>Très chaude, très humide</td>
+                        <td>ZCIT</td>
+                    </tr>
+                </table>
+
+                <h4>2.3.2 Les fronts</h4>
+                <p>Zone de contact entre deux masses d'air de propriétés différentes :</p>
+
+                <div class="important">
+                    <strong>Types de fronts :</strong>
+                    <ul>
+                        <li><strong>Front chaud</strong> : masse chaude remplace masse froide. Pente douce (1/100 à 1/300). Nuages en altocumulus, nimbostratus. Pluie continue, modérée.</li>
+                        <li><strong>Front froid</strong> : masse froide pousse sous masse chaude. Pente raide (1/50 à 1/100). Cumulonimbus. Orages violents, intenses mais courts.</li>
+                        <li><strong>Front occlus</strong> : front froid rattrape front chaud. Deux types : occlusion froide (air froid sous air doux) et occlusion chaude.</li>
+                        <li><strong>Front stationnaire</strong> : aucune masse ne progresse. Pluies persistantes.</li>
+                    </ul>
+                </div>
+
+                <h3>2.4 Phénomènes climatiques particuliers</h3>
+
+                <h4>2.4.1 El Niño / La Niña (ENSO)</h4>
+                <div class="definition">
+                    <strong>ENSO</strong> (El Niño-Southern Oscillation) : oscillation climatique dans le Pacifique tropical avec deux phases :
+                </div>
+
+                <table>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Conditions Pacifique Est</th>
+                        <th>Conséquences mondiales</th>
+                    </tr>
+                    <tr>
+                        <td><strong>El Niño</strong></td>
+                        <td>Eaux chaudes, convection atmosphérique</td>
+                        <td>Sécheresse Australie/Indonésie, pluies Amérique du Sud</td>
+                    </tr>
+                    <tr>
+                        <td><strong>La Niña</strong></td>
+                        <td>Eaux froides, renforcement des alizés</td>
+                        <td>Inverses d'El Niño, ouragans Atlantique fréquents</td>
+                    </tr>
+                </table>
+
+                <h4>2.4.2 Autres oscillations</h4>
+                <ul>
+                    <li><strong>NAO</strong> (North Atlantic Oscillation) : pression entre Açores et Islande</li>
+                    <li><strong>AO</strong> (Arctic Oscillation) : circulation arctique</li>
+                    <li><strong>MJO</strong> (Madden-Julian Oscillation) : onde tropicale intra-saisonnière</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Chapitre 3: Classification des climats -->
+        <div class="chapter">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <h2>📖 Chapitre 3 : Classification et types de climats</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="chapter-content">
+                <h3>3.1 Classifications climatiques</h3>
+
+                <h4>3.1.1 Classification de Köppen (1918)</h4>
+                <p>La plus utilisée, basée sur température et précipitations :</p>
+
+                <div class="diagram">
+                    <strong>Codes Köppen principaux :</strong><br><br>
+                    <span class="climate-zone equatorial">A - Tropical</span>
+                    <span class="climate-zone arid">B - Aride</span>
+                    <span class="climate-zone temperate">C - Tempéré doux</span>
+                    <span class="climate-zone continental">D - Continental</span>
+                    <span class="climate-zone polar">E - Polaire</span>
+                </div>
+
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Critères</th>
+                        <th>Sous-types</th>
+                        <th>Localisation</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Af</strong></td>
+                        <td>T° > 18°C, P > 60mm tous les mois</td>
+                        <td>Équatorial</td>
+                        <td>Amazonie, Congo, Indonésie</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Am</strong></td>
+                        <td>T° > 18°C, saison sèche courte</td>
+                        <td>Monsoon</td>
+                        <td>Asie du Sud-Est, Afrique de l'Ouest</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Aw/As</strong></td>
+                        <td>T° > 18°C, saison sèche hiver/été</td>
+                        <td>Savane</td>
+                        <td>Sahel, Brésil, Inde</td>
+                    </tr>
+                    <tr>
+                        <td><strong>BWh</strong></td>
+                        <td>P < potentiel d'évaporation</td>
+                        <td>Désert chaud</td>
+                        <td>Sahara, Arabie, Australie</td>
+                    </tr>
+                    <tr>
+                        <td><strong>BSk</strong></td>
+                        <td>Steppe, T° annuelle < 18°C</td>
+                        <td>Steppe froide</td>
+                        <td>Asie centrale, Grandes Plaines</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Csa</strong></td>
+                        <td>T° coldest > -3°C, été chaud/sec</td>
+                        <td>Méditerranéen</td>
+                        <td>Méditerranée, Californie, Chili</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cfb</strong></td>
+                        <td>T° coldest > -3°C, été frais, humide</td>
+                        <td>Océanique</td>
+                        <td>Europe de l'Ouest, NZ</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dfa</strong></td>
+                        <td>T° coldest < -3°C, été chaud</td>
+                        <td>Continental humide</td>
+                        <td>USA Nord-Est, Europe de l'Est</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ET</strong></td>
+                        <td>0°C < T° moyenne < 10°C</td>
+                        <td>Toundra</td>
+                        <td>Alaska, Sibérie Nord</td>
+                    </tr>
+                    <tr>
+                        <td><strong>EF</strong></td>
+                        <td>T° moyenne < 0°C</td>
+                        <td>Glacial</td>
+                        <td>Antarctique, Groenland</td>
+                    </tr>
+                </table>
+
+                <h4>3.1.2 Classification de Thornthwaite (1948)</h4>
+                <p>Basée sur l'évapotranspiration potentielle (ETP) et l'indice d'humidité :</p>
+
+                <div class="formula">
+                    <strong>Indice d'humidité (Im) :</strong><br>
+                    Im = 100 × (P - ETP) / ETP<br>
+                    Avec P = précipitations, ETP = évapotranspiration potentielle
+                </div>
+
+                <h3>3.2 Description des grands types de climats</h3>
+
+                <h4>3.2.1 Climat équatorial (Af)</h4>
+                <div class="example">
+                    <strong>Caractéristiques :</strong>
+                    <ul>
+                        <li>Température moyenne annuelle : 25-28°C (stable)</li>
+                        <li>Amplitude thermique annuelle : < 5°C</li>
+                        <li>Précipitations : 2000-4000 mm/an, régulières</li>
+                        <li>Pression : toujours basse (convection permanente)</li>
+                        <li>Végétation : forêt tropicale humide</li>
+                    </ul>
+                </div>
+
+                <h4>3.2.2 Climat tropical de savane (Aw)</h4>
+                <ul>
+                    <li>Deux saisons : humide (été) et sèche (hiver)</li>
+                    <li>Température : 20-35°C, plus de variation qu'équatorial</li>
+                    <li>Précipitations : 800-1500 mm/an</li>
+                    <li>Végétation : savane arborée puis herbeuse</li>
+                </ul>
+
+                <h4>3.2.3 Climat désertique (BWh, BWk)</h4>
+                <ul>
+                    <li>Précipitations : < 250 mm/an (parfois 0)</li>
+                    <li>Amplitude thermique extrême : 40°C jour, 0°C nuit</li>
+                    <li>Couverture nuageuse quasi nulle</li>
+                    <li>Exemples : Sahara, Atacama, Gobi</li>
+                </ul>
+
+                <h4>3.2.4 Climat méditerranéen (Csa, Csb)</h4>
+                <div class="important">
+                    <strong>Spécificités :</strong>
+                    <ul>
+                        <li>Été chaud et sec (anticyclone des Açores)</li>
+                        <li>Hiver doux et humide (dépressions atlantiques)</li>
+                        <li>Température moyenne : 12-25°C</li>
+                        <li>Précipitations : 400-800 mm/an concentrées hiver</li>
+                        <li>Végétation : maquis, garrigue, chaparral</li>
+                    </ul>
+                </div>
+
+                <h4>3.2.5 Climat océanique (Cfb)</h4>
+                <ul>
+                    <li>Faible amplitude thermique (maritimité)</li>
+                    <li>Précipitations régulières toute l'année (800-1500 mm)</li>
+                    <li>Humidité élevée, brouillards fréquents</li>
+                    <li>Vents d'ouest dominants</li>
+                </ul>
+
+                <h4>3.2.6 Climat continental (Dfa, Dfb, Dwa)</h4>
+                <ul>
+                    <li>Amplitude thermique saisonnière très forte (30-40°C)</li>
+                    <li>Hivers froids (< -20°C possibles), étés chauds</li>
+                    <li>Précipitations modérées (500-800 mm), été maximum</li>
+                    <li>Neige importante en hiver</li>
+                </ul>
+
+                <h3>3.3 Changement climatique global</h3>
+
+                <h4>3.3.1 Évolution récente</h4>
+                <div class="definition">
+                    <strong>Réchauffement climatique :</strong> Augmentation de la température moyenne mondiale de +1,1°C depuis 1880, accélérée depuis 1980 (+0,18°C/décennie).
+                </div>
+
+                <table>
+                    <tr>
+                        <th>Indicateur</th>
+                        <th>Tendance</th>
+                        <th>Conséquences</th>
+                    </tr>
+                    <tr>
+                        <td>Température globale</td>
+                        <td>+1,1°C depuis 1880</td>
+                        <td>Vagues de chaleur, stress hydrique</td>
+                    </tr>
+                    <tr>
+                        <td>Niveau des mers</td>
+                        <td>+3,7 mm/an (accélération)</td>
+                        <td>Submersion des zones côtières</td>
+                    </tr>
+                    <tr>
+                        <td>Glace arctique</td>
+                        <td>-13% / décennie</td>
+                        <td>Fonte du permafrost, albedo ↓</td>
+                    </tr>
+                    <tr>
+                        <td>CO₂ atmosphérique</td>
+                        <td>420 ppm (2023)</td>
+                        <td>Acidification océans, GES</td>
+                    </tr>
+                    <tr>
+                        <td>Événements extrêmes</td>
+                        <td>Fréquence ×2-3</td>
+                        <td>Sécheresses, inondations, cyclones</td>
+                    </tr>
+                </table>
+
+                <h4>3.3.2 Scénarios futurs (GIEC AR6)</h4>
+                <div class="important">
+                    <strong>Scénarios SSP (Shared Socioeconomic Pathways) :</strong>
+                    <ul>
+                        <li><strong>SSP1-1.9</strong> : Développement durable, +1,5°C d'ici 2100</li>
+                        <li><strong>SSP1-2.6</strong> : Écologique, +2°C</li>
+                        <li><strong>SSP2-4.5</strong> : Intermédiaire, +2,7°C</li>
+                        <li><strong>SSP3-7.0</strong> : Régionalisme, +3,6°C</li>
+                        <li><strong>SSP5-8.5</strong> : Fossile intensif, +4,4°C</li>
+                    </ul>
+                </div>
+
+                <h4>3.3.3 Impacts régionaux projetés</h4>
+                <ul>
+                    <li><strong>Zones arides</strong> : Expansion des déserts, stress hydrique</li>
+                    <li><strong>Régions polaires</strong> : Fonte accélérée, perturbations écosystèmes</li>
+                    <li><strong>Îles et côtes</strong> : Montée des eaux, salinisation</li>
+                    <li><strong>Tropiques</strong> : Canicules humides extrêmes, cyclones intenses</li>
+                    <li><strong>Latitudes moyennes</strong> : Sécheresses agricoles, incendies</li>
+                </ul>
+
+                <div class="example">
+                    <strong>Accords de Paris (2015) :</strong> Objectif de limiter le réchauffement à +2°C par rapport à l'ère préindustrielle, idéalement +1,5°C. NDC (Contributions Déterminées au niveau National) à réviser tous les 5 ans.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleChapter(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Ouvrir le premier chapitre par défaut
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstChapter = document.querySelector('.chapter-header');
+            if (firstChapter) {
+                toggleChapter(firstChapter);
+            }
+        });
+    </script>
+</body>
+</html>
